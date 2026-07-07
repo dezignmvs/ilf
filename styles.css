@@ -1,0 +1,570 @@
+/* ==========================================================================
+   DESIGN SYSTEM & VARIABLES
+   ========================================================================== */
+@import url('https://api.fontshare.com/v2/css?f[]=clash-grotesk@300,400,500,600,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* Brand Colors from index-model.jpg */
+  --brand-blue: #1e6ee2;
+  --brand-yellow: #fcd15a;
+  --accent-cyan: #00bcd4;
+
+  /* Text and Background Colors */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --text-primary: #111111;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+
+  /* Fonts */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: 'Clash Grotesk', var(--font-sans);
+
+  /* Layout and Transitions */
+  --container-max-width: 1360px;
+  --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --header-margin: 20px;
+  --header-height: 60px; /* Slender style height */
+}
+
+/* ==========================================================================
+   RESET & BASE STYLES
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.5;
+  overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Decorative Background elements (no floating symbols) */
+.bg-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(30, 110, 226, 0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 110, 226, 0.022) 1px, transparent 1px);
+  background-size: 60px 60px;
+  background-position: center top;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.bg-glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+  filter: blur(140px);
+  opacity: 0.55;
+  transition: opacity var(--transition-smooth);
+}
+
+.bg-glow-1 {
+  top: -150px;
+  right: -100px;
+  background: radial-gradient(circle, rgba(30, 110, 226, 0.12) 0%, transparent 70%);
+}
+
+.bg-glow-2 {
+  top: 400px;
+  left: -200px;
+  background: radial-gradient(circle, rgba(0, 188, 212, 0.08) 0%, transparent 70%);
+}
+
+section {
+  padding: 100px 24px;
+  position: relative;
+}
+
+.container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* ==========================================================================
+   FLOATING HEADER & NAVIGATION
+   ========================================================================== */
+header {
+  position: fixed;
+  top: var(--header-margin);
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 64px);
+  max-width: 1360px;
+  height: var(--header-height);
+  background-color: var(--brand-blue);
+  border-radius: 9999px;
+  box-shadow: 0 10px 30px rgba(30, 110, 226, 0.25);
+  z-index: 1000;
+  transition: background-color var(--transition-smooth), box-shadow var(--transition-smooth), transform var(--transition-smooth);
+}
+
+header.header-hidden {
+  transform: translate(-50%, -120px);
+}
+
+header.nav-hidden {
+  background-color: transparent; /* Blue disappears */
+  box-shadow: none; /* Shadow disappears */
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 24px; /* Tighter padding for a wider, cleaner structure */
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logo-img {
+  height: 28px; /* Scale logo to fit slender header */
+  width: auto;
+  display: block;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 36px; /* Spacing adjusted to match crop UI */
+  list-style: none;
+  margin-left: auto; /* Push nav list closer to the toggle icon */
+  margin-right: 36px; /* Gap between achievements link and toggle icon */
+  transition: opacity var(--transition-smooth), transform var(--transition-smooth);
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #ffffff; /* Solid white text links as per crop UI */
+  font-family: var(--font-heading);
+  font-weight: 400; /* Clean thin weight */
+  font-size: 0.95rem;
+  transition: opacity var(--transition-fast);
+  padding: 8px 0;
+  opacity: 0.92;
+}
+
+.nav-link.active {
+  opacity: 1;
+}
+
+/* Desktop navbar fade-away animation state */
+@media (min-width: 769px) {
+  header.nav-hidden .nav-menu {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-10px);
+  }
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 4px;
+  transition: transform var(--transition-fast);
+}
+
+
+
+.grid-icon {
+  width: 22px; /* Slightly larger toggle icon to align with links height */
+  height: 22px;
+  object-fit: contain;
+  display: block;
+}
+
+/* ==========================================================================
+   BUTTONS
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 28px;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 0px; /* Sharp corners */
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+}
+
+.btn-cyan {
+  background-color: var(--accent-cyan);
+  color: #ffffff;
+  box-shadow: none; /* No shadow */
+}
+
+.btn-cyan:active {
+  transform: none;
+}
+
+/* ==========================================================================
+   HERO SECTION
+   ========================================================================== */
+.hero {
+  padding-top: calc(var(--header-height) + var(--header-margin) + 80px);
+  padding-bottom: 100px;
+  background-color: #ffffff;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.hero-title {
+  font-family: var(--font-heading);
+  font-size: 4rem;
+  font-weight: 300; /* Light weight for "From Spark to" */
+  line-height: 1.15;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
+}
+
+.highlight-badge {
+  background-color: var(--brand-yellow);
+  color: var(--text-primary);
+  padding: 2px 12px;
+  border-radius: 0px; /* Sharp corners */
+  display: inline-block;
+  font-weight: 600; /* Semibold/bold weight for "Explosion" */
+  margin-top: 4px;
+  border: none; /* No border */
+}
+
+.hero-description {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 36px;
+  max-width: 640px;
+}
+
+.hero-visual {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.poster-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+}
+
+.poster-img {
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.vertical-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #888888;
+  font-family: var(--font-sans);
+}
+
+/* ==========================================================================
+   ABOUT SECTION
+   ========================================================================== */
+.about-section {
+  background-color: var(--brand-yellow);
+  padding: 80px 24px;
+  color: var(--text-primary);
+}
+
+.about-content-wrapper {
+  text-align: center;
+  max-width: 1100px; /* Stretched to fit layout spacing */
+  margin: 0 auto;
+}
+
+.about-eyebrow {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-size: 1.6rem;
+  font-weight: 300;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.about-title {
+  font-family: var(--font-heading);
+  font-size: 2.35rem;
+  font-weight: 500; /* Clean medium weight as per target UI */
+  text-transform: none; /* Keep Title Case */
+  letter-spacing: -0.01em;
+  margin-bottom: 12px;
+}
+
+.about-divider {
+  width: 120px; /* Wider line matching target UI */
+  height: 1.5px; /* Slightly thicker */
+  background-color: var(--text-primary);
+  margin: 0 auto 28px auto;
+}
+
+.about-description {
+  font-family: var(--font-heading); /* Clash Grotesk text matching target UI */
+  font-size: 1.1rem;
+  line-height: 1.6;
+  font-weight: 400;
+  opacity: 0.88;
+}
+
+/* ==========================================================================
+   PROGRAMS & ACHIEVEMENTS SECTION
+   ========================================================================== */
+.programs-section {
+  background-color: #ffffff;
+  padding: 100px 24px;
+}
+
+.programs-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr;
+  gap: 30px;
+  align-items: stretch;
+}
+
+.programs-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.black-card {
+  background-color: #000000;
+  border-radius: 24px;
+  transition: transform var(--transition-smooth);
+}
+
+.card-wide {
+  height: 280px;
+  width: 100%;
+}
+
+.programs-info {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.programs-desc {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+  max-width: 90%;
+}
+
+.programs-middle {
+  display: flex;
+}
+
+.card-tall {
+  width: 100%;
+  height: 100%;
+  min-height: 480px;
+}
+
+.programs-right {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.card-stacked {
+  flex: 1;
+  width: 100%;
+  min-height: 90px;
+}
+
+/* ==========================================================================
+   MEDIA QUERIES (RESPONSIVENESS)
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .hero-title {
+    font-size: 3rem;
+  }
+
+  .highlight-badge {
+    font-size: 3rem;
+  }
+
+  .programs-grid {
+    grid-template-columns: 1.5fr 1fr;
+    gap: 24px;
+  }
+
+  .programs-right {
+    grid-column: span 2;
+    flex-direction: row;
+  }
+
+  .card-stacked {
+    height: 120px;
+  }
+}
+
+@media (max-width: 768px) {
+  header {
+    width: calc(100% - 24px);
+    top: 12px;
+    height: 310px; /* Height when expanded */
+    border-radius: 24px;
+    overflow: hidden;
+    transition: height var(--transition-smooth), border-radius var(--transition-smooth), background-color var(--transition-smooth), box-shadow var(--transition-smooth);
+  }
+
+  header.nav-hidden {
+    height: 60px; /* Collapsed state */
+    border-radius: 9999px;
+    background-color: transparent;
+    box-shadow: none;
+  }
+
+  .header-container {
+    position: relative;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+  }
+
+  /* Navigation Links - Dropdown layout within expanded header */
+  nav {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+  }
+
+  .nav-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 24px 0;
+    list-style: none;
+    transition: opacity var(--transition-fast);
+    opacity: 0;
+    pointer-events: none;
+    margin: 0;
+  }
+
+  header:not(.nav-hidden) .nav-menu {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .nav-link {
+    font-size: 1.1rem;
+    padding: 4px 0;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+  }
+
+  .hero-content {
+    align-items: center;
+  }
+
+  .hero-visual {
+    justify-content: center;
+    order: -1;
+  }
+
+  .programs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .programs-right {
+    grid-column: span 1;
+    flex-direction: column;
+  }
+
+  .programs-middle {
+    height: 300px;
+  }
+
+  .card-tall {
+    min-height: auto;
+  }
+
+  .programs-left {
+    gap: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+
+  .highlight-badge {
+    font-size: 2.5rem;
+    padding: 2px 14px;
+  }
+}
