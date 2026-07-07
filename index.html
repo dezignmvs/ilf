@@ -26,7 +26,12 @@
       <nav aria-label="Main Navigation">
         <ul class="nav-menu" id="nav-menu">
           <li><a href="#home" class="nav-link active">Home</a></li>
-          <li><a href="#about" class="nav-link">About</a></li>
+          <li class="nav-item-dropdown">
+            <a href="#about" class="nav-link dropdown-toggle nav-link-with-arrow">About <span class="nav-arrow">&#9662;</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="committee.html" class="dropdown-item">Committee</a></li>
+            </ul>
+          </li>
           <li><a href="#news-events" class="nav-link">News&Events</a></li>
           <li><a href="#achievements" class="nav-link">Achievements</a></li>
         </ul>
@@ -71,6 +76,9 @@
           <h2 class="about-title">ILFA Students' Union</h2>
           <div class="about-divider"></div>
           <p class="about-description">The ILFA Students' Union of the 10th Batch at SFADC Odamala is a student representative body established to promote unity, leadership, and the overall development of students. It serves as a platform where students can actively participate in academic, cultural, social, and extracurricular activities while fostering cooperation and mutual respect among classmates.</p>
+          <div style="margin-top: 28px;">
+            <a href="committee.html" class="btn btn-cyan">Committee &rarr;</a>
+          </div>
         </div>
       </div>
     </section>

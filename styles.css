@@ -183,6 +183,75 @@ header.nav-hidden {
   opacity: 1;
 }
 
+/* Dropdown navigation item container */
+.nav-item-dropdown {
+  position: relative;
+}
+
+.nav-link-with-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-arrow {
+  font-size: 0.65rem;
+  transition: transform var(--transition-fast);
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Dropdown menu list styling */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background-color: var(--brand-blue);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  padding: 8px 0;
+  min-width: 140px;
+  list-style: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
+  z-index: 1100;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Desktop hover toggle for dropdown */
+@media (min-width: 769px) {
+  .nav-item-dropdown:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+  
+  .nav-item-dropdown:hover .nav-arrow {
+    transform: rotate(180deg);
+  }
+}
+
+.dropdown-item {
+  display: block;
+  padding: 8px 20px;
+  color: #ffffff;
+  text-decoration: none;
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 400;
+  opacity: 0.88;
+  transition: opacity var(--transition-fast), background-color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.dropdown-item:hover,
+.dropdown-item.active {
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
 /* Desktop navbar fade-away animation state */
 @media (min-width: 769px) {
   header.nav-hidden .nav-menu {
@@ -521,6 +590,38 @@ header.nav-hidden {
     padding: 4px 0;
   }
 
+  .nav-item-dropdown {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .dropdown-menu {
+    position: static;
+    transform: none;
+    box-shadow: none;
+    background-color: transparent;
+    opacity: 1;
+    visibility: visible;
+    display: none; /* Controlled by JS active class */
+    padding: 10px 0 0 0;
+    min-width: auto;
+    border: none;
+    transition: none;
+  }
+
+  .nav-item-dropdown.active .dropdown-menu {
+    display: block;
+  }
+
+  .dropdown-item {
+    font-size: 1rem;
+    padding: 6px 0;
+    opacity: 0.8;
+  }
+
   .hero-grid {
     grid-template-columns: 1fr;
     gap: 40px;
@@ -566,5 +667,147 @@ header.nav-hidden {
   .highlight-badge {
     font-size: 2.5rem;
     padding: 2px 14px;
+  }
+}
+
+/* ==========================================================================
+   COMMITTEE SECTION & CARDS
+   ========================================================================== */
+.committee-hero {
+  padding-top: calc(var(--header-height) + var(--header-margin) + 80px);
+  padding-bottom: 20px;
+  background-color: #ffffff;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.committee-title {
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  font-weight: 500;
+  margin-top: 10px;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+.committee-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.committee-section {
+  padding-top: 40px;
+  padding-bottom: 100px;
+  background-color: #ffffff;
+}
+
+.committee-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 36px;
+}
+
+.member-card {
+  background-color: var(--bg-secondary);
+  border-radius: 24px;
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
+}
+
+.member-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(30, 110, 226, 0.08);
+}
+
+.member-image-wrapper {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.member-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.member-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 16px 8px 8px 8px;
+}
+
+.member-name {
+  font-family: var(--font-heading);
+  font-size: 1.45rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.member-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.member-role {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--brand-blue);
+  background-color: rgba(30, 110, 226, 0.06);
+  padding: 4px 12px;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  display: inline-block;
+}
+
+.member-place {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.member-place::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background-color: var(--text-muted);
+  border-radius: 50%;
+}
+
+@media (max-width: 992px) {
+  .committee-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+  }
+}
+
+@media (max-width: 576px) {
+  .committee-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .committee-title {
+    font-size: 2.3rem;
   }
 }
