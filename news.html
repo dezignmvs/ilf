@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>News & Events - ILFA 10th Batch Union</title>
+  <meta name="description" content="Stay updated with the latest news, events, and announcements from ILFA - 10th Batch Union, Sheikh Fareed Auliya Da'wa College.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <!-- Core Design Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  <!-- Page Specific Bento Layout Stylesheet -->
+  <link rel="stylesheet" href="news.css">
+</head>
+<body>
+
+  <!-- Decorative Background Layout -->
+  <div class="bg-grid"></div>
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <!-- Floating Header Navigation -->
+  <header id="header">
+    <div class="header-container">
+      <a href="index.html#home" class="logo">
+        <img src="files/logo-black.png" alt="ILFA Logo" class="logo-img" id="logo-img">
+      </a>
+
+      <!-- Navigation Links -->
+      <nav aria-label="Main Navigation">
+        <ul class="nav-menu" id="nav-menu">
+          <li><a href="index.html#home" class="nav-link">Home</a></li>
+          <li class="nav-item-dropdown">
+            <a href="index.html#about" class="nav-link dropdown-toggle nav-link-with-arrow">About <span class="nav-arrow">&#9662;</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="committee.html" class="dropdown-item">Committee</a></li>
+            </ul>
+          </li>
+          <li><a href="news.html" class="nav-link active">News&Events</a></li>
+          <li><a href="achievement.html" class="nav-link">Achievements</a></li>
+        </ul>
+      </nav>
+
+      <!-- Grid Icon / Menu Indicator -->
+      <div class="header-right" id="mobile-toggle" aria-expanded="false" aria-controls="nav-menu">
+        <img src="files/5rec-bw.png" alt="Menu" class="grid-icon" id="toggle-icon">
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <section class="news-section">
+      <div class="container">
+        
+        <!-- Section Header -->
+        <div class="news-header">
+          <span class="news-eyebrow">ILFA Bulletin</span>
+          <h1 class="news-title">News & Events</h1>
+          <p class="news-subtitle">Follow our journey and discover updates on our intellectual, social, and cultural activities.</p>
+        </div>
+
+        <!-- Bento Grid Layout -->
+        <div class="bento-grid" id="bento-grid-container">
+          
+          <!-- ROW 1: Wide Left (8 cols) & Narrow Right (4 cols) -->
+          <div class="bento-card span-8 bg-vamino" id="bento-slot-1">
+            <a href="news-detail.html?id=vamino" class="bento-card-banner">
+              <span class="pill-badge">General</span>
+              <div class="banner-logo-wrapper">
+                <img src="files/vamino_logo.png" alt="Vamino Caravan Logo" class="banner-logo">
+              </div>
+              <h2 class="banner-title">Darul Huda Ruby Jubilee: Vamino Message Rally to Begin on December 11</h2>
+            </a>
+          </div>
+
+          <div class="bento-card span-4" id="bento-slot-2">
+            <a href="news-detail.html?id=edukening" class="bento-card-photo">
+              <img src="files/annivPoster.jpg" alt="Edukening Academic Seminar" class="photo-card-bg">
+              <span class="pill-badge">General</span>
+              <h2 class="photo-card-title">Edukening 2.0: Darul Huda and Doha Institute Academic Seminar Held on December 7</h2>
+            </a>
+          </div>
+
+          <!-- ROW 2: Narrow Left (4 cols) & Wide Right (8 cols) -->
+          <div class="bento-card span-4" id="bento-slot-3">
+            <a href="news-detail.html?id=mahmood-hudawi" class="bento-card-photo">
+              <img src="files/member1.png" alt="Mahmood Hudawi Kooriya" class="photo-card-bg">
+              <span class="pill-badge">Achievements</span>
+              <h2 class="photo-card-title">Mahmood Hudawi Kooriya Wins Infosys Prize Worth ₹84 Lakhs</h2>
+            </a>
+          </div>
+
+          <div class="bento-card span-8" id="bento-slot-4">
+            <a href="news-detail.html?id=librarians-summit" class="bento-card-photo">
+              <img src="files/member2.png" alt="Librarians' Summit" class="photo-card-bg">
+              <span class="pill-badge">Bookplus</span>
+              <h2 class="photo-card-title">"Books Should Be Gateways to Broader Readership": Librarians' Summit</h2>
+            </a>
+          </div>
+
+          <!-- ROW 3: Four Cards (3 cols each) -->
+          <div class="bento-card span-3">
+            <a href="news-detail.html?id=episteme" class="bento-card-split">
+              <div class="split-image-container">
+                <img src="files/news_seminar.png" alt="Episteme Seminar" class="split-image">
+                <span class="pill-badge">Qatar Hadia</span>
+              </div>
+              <div class="split-content-container">
+                <h2 class="split-title">Episteme 24: A Successful Intellectual Gathering Hosted by Qatar Hadia</h2>
+              </div>
+            </a>
+          </div>
+
+          <div class="bento-card span-3">
+            <a href="news-detail.html?id=seven-books" class="bento-card-split">
+              <div class="split-image-container">
+                <img src="files/annivPoster.jpg" alt="Seven Books Launched" class="split-image">
+                <span class="pill-badge">Bookplus</span>
+              </div>
+              <div class="split-content-container">
+                <h2 class="split-title">Seven New Books Launched</h2>
+              </div>
+            </a>
+          </div>
+
+          <div class="bento-card span-3">
+            <a href="news-detail.html?id=kashmir-parvaz" class="bento-card-split">
+              <div class="split-image-container">
+                <img src="files/news_community.png" alt="Kashmir Parvaz" class="split-image">
+                <span class="pill-badge">National Project</span>
+              </div>
+              <div class="split-content-container">
+                <h2 class="split-title">Igniting a Creative Renaissance in Kashmir with Parvaz</h2>
+              </div>
+            </a>
+          </div>
+
+          <div class="bento-card span-3">
+            <a href="news-detail.html?id=treasure-hunt" class="bento-card-split">
+              <div class="split-image-container">
+                <img src="files/news_sports.png" alt="Treasure Hunt" class="split-image">
+                <span class="pill-badge">Hadia CSE</span>
+              </div>
+              <div class="split-content-container">
+                <h2 class="split-title">'Treasure hunt' in search of the treasure of historical memories</h2>
+              </div>
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <!-- Logo Column -->
+      <div class="footer-logo-col">
+        <img src="files/logo.png" alt="ILFA Logo" class="footer-logo">
+      </div>
+      
+      <!-- About Column -->
+      <div class="footer-col">
+        <h3>About</h3>
+        <p>ILFA Students' Union of the 10th Batch at Sheikh Fareed Auliya Da'wa College, Odamala, is a student representative body established to promote unity, leadership, and positive change within our community.</p>
+      </div>
+      
+      <!-- Quick Links Column -->
+      <div class="footer-col">
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="index.html#home">Home</a></li>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="committee.html">Committee</a></li>
+          <li><a href="news.html">News & Events</a></li>
+        </ul>
+      </div>
+      
+      <!-- External Links Column -->
+      <div class="footer-col">
+        <h3>External Links</h3>
+        <ul class="footer-links">
+          <li><a href="https://dhiu.in/" target="_blank" rel="noopener">Darul Huda</a></li>
+          <li><a href="https://hadia.in/" target="_blank" rel="noopener">Hadia</a></li>
+          <li><a href="http://cse.hadia.in/" target="_blank" rel="noopener">CSE</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- Footer Bottom Copyright -->
+    <div class="footer-bottom">
+      <p class="footer-copyright">&copy; 2026 ILFA is the official website of ILFA 10th Batch Union</p>
+    </div>
+  </footer>
+
+  <!-- Supabase Integration -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const supabaseUrl = 'https://brgjroxykxdruyazhqmy.supabase.co';
+      const supabaseKey = 'sb_publishable_MfzuFBf0TaFfJh38ZOBw6w_GBw8AZ3q';
+      const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+      const bentoGridContainer = document.getElementById('bento-grid-container');
+      if (!bentoGridContainer) return;
+
+      try {
+        // 1. Fetch all news articles from Supabase
+        const { data: allNews, error: allNewsError } = await supabaseClient
+          .from('news')
+          .select('*')
+          .order('date', { ascending: false });
+
+        if (allNewsError) throw allNewsError;
+
+        if (allNews && allNews.length > 0) {
+          // 2. Fetch news page bento settings
+          const { data: settingsData, error: settingsError } = await supabaseClient
+            .from('settings')
+            .select('*')
+            .eq('key', 'news_page_settings')
+            .maybeSingle();
+
+          let selectedIds = [];
+          if (!settingsError && settingsData && settingsData.value) {
+            selectedIds = (settingsData.value.selected_ids || []).filter(id => id && id !== '');
+          }
+
+          // Build featured news array (exactly 4 items)
+          const featuredNews = [];
+          const featuredSet = new Set();
+
+          // Fill with selected IDs from settings if they exist in allNews
+          selectedIds.forEach(id => {
+            const article = allNews.find(item => item.id.toString() === id.toString());
+            if (article && featuredNews.length < 4) {
+              featuredNews.push(article);
+              featuredSet.add(article.id.toString());
+            }
+          });
+
+          // Fill remaining top slots with latest articles
+          allNews.forEach(article => {
+            if (featuredNews.length < 4 && !featuredSet.has(article.id.toString())) {
+              featuredNews.push(article);
+              featuredSet.add(article.id.toString());
+            }
+          });
+
+          // Filter remaining articles for the list view
+          const remainingNews = allNews.filter(article => !featuredSet.has(article.id.toString()));
+
+          // Rebuild bento grid
+          let gridHtml = '';
+
+          // Render top 4 featured cards
+          for (let i = 0; i < 4; i++) {
+            const item = featuredNews[i];
+            if (item) {
+              const spanClass = (i === 0 || i === 3) ? 'span-8' : 'span-4';
+              gridHtml += `
+                <div class="bento-card ${spanClass}" id="bento-slot-${i + 1}">
+                  <a href="news-detail.html?id=${item.id}" class="bento-card-photo">
+                    <img src="${item.image_url}" alt="${item.title}" class="photo-card-bg">
+                    <span class="pill-badge">${item.tag}</span>
+                    <h2 class="photo-card-title">${item.title}</h2>
+                  </a>
+                </div>
+              `;
+            }
+          }
+
+          // Render remaining articles as split cards
+          remainingNews.forEach(item => {
+            gridHtml += `
+              <div class="bento-card span-3">
+                <a href="news-detail.html?id=${item.id}" class="bento-card-split">
+                  <div class="split-image-container">
+                    <img src="${item.image_url}" alt="${item.title}" class="split-image">
+                    <span class="pill-badge">${item.tag}</span>
+                  </div>
+                  <div class="split-content-container">
+                    <h2 class="split-title">${item.title}</h2>
+                  </div>
+                </a>
+              </div>
+            `;
+          });
+
+          bentoGridContainer.innerHTML = gridHtml;
+        }
+      } catch (err) {
+        console.error("Error loading news page bento grid:", err);
+      }
+    });
+  </script>
+</body>
+</html>

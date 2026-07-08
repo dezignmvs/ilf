@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>News Details - ILFA 10th Batch Union</title>
+  <meta name="description" content="Read full details and coverage on academic, social, and cultural events from ILFA - 10th Batch Union.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <!-- Core Design Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  <!-- Page Specific News Stylesheet -->
+  <link rel="stylesheet" href="news.css">
+</head>
+<body>
+
+  <!-- Decorative Background Layout -->
+  <div class="bg-grid"></div>
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <!-- Floating Header Navigation -->
+  <header id="header">
+    <div class="header-container">
+      <a href="index.html#home" class="logo">
+        <img src="files/logo-black.png" alt="ILFA Logo" class="logo-img" id="logo-img">
+      </a>
+
+      <!-- Navigation Links -->
+      <nav aria-label="Main Navigation">
+        <ul class="nav-menu" id="nav-menu">
+          <li><a href="index.html#home" class="nav-link">Home</a></li>
+          <li class="nav-item-dropdown">
+            <a href="index.html#about" class="nav-link dropdown-toggle nav-link-with-arrow">About <span class="nav-arrow">&#9662;</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="committee.html" class="dropdown-item">Committee</a></li>
+            </ul>
+          </li>
+          <li><a href="news.html" class="nav-link active">News&Events</a></li>
+          <li><a href="achievement.html" class="nav-link">Achievements</a></li>
+        </ul>
+      </nav>
+
+      <!-- Grid Icon / Menu Indicator -->
+      <div class="header-right" id="mobile-toggle" aria-expanded="false" aria-controls="nav-menu">
+        <img src="files/5rec-bw.png" alt="Menu" class="grid-icon" id="toggle-icon">
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <section class="detail-section">
+      <div class="detail-container">
+        
+        <!-- Post Date Pill -->
+        <div class="detail-date-wrapper">
+          <span class="detail-date-badge" id="article-date">2024-10-29</span>
+        </div>
+
+        <!-- Post Title -->
+        <h1 class="detail-title" id="article-title">Loading Article Title...</h1>
+
+        <!-- Lead Paragraph -->
+        <p class="detail-lead" id="article-lead">Loading article lead introduction...</p>
+
+        <!-- Main Featured Image -->
+        <div class="detail-image-wrapper">
+          <img src="files/news_seminar.png" alt="Featured News Image" class="detail-image" id="article-image">
+        </div>
+
+        <!-- Article Body -->
+        <div class="detail-body-content" id="article-body">
+          <!-- Dynamically inserted paragraphs -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Related News Section -->
+    <section class="related-section">
+      <div class="detail-container">
+        <h2 class="related-section-title">Related News</h2>
+        <div class="related-grid" id="related-news-container">
+          <!-- Dynamically inserted related cards -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <!-- Logo Column -->
+      <div class="footer-logo-col">
+        <img src="files/logo.png" alt="ILFA Logo" class="footer-logo">
+      </div>
+      
+      <!-- About Column -->
+      <div class="footer-col">
+        <h3>About</h3>
+        <p>ILFA Students' Union of the 10th Batch at Sheikh Fareed Auliya Da'wa College, Odamala, is a student representative body established to promote unity, leadership, and positive change within our community.</p>
+      </div>
+      
+      <!-- Quick Links Column -->
+      <div class="footer-col">
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="index.html#home">Home</a></li>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="committee.html">Committee</a></li>
+          <li><a href="news.html">News & Events</a></li>
+        </ul>
+      </div>
+      
+      <!-- External Links Column -->
+      <div class="footer-col">
+        <h3>External Links</h3>
+        <ul class="footer-links">
+          <li><a href="https://dhiu.in/" target="_blank" rel="noopener">Darul Huda</a></li>
+          <li><a href="https://hadia.in/" target="_blank" rel="noopener">Hadia</a></li>
+          <li><a href="http://cse.hadia.in/" target="_blank" rel="noopener">CSE</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- Footer Bottom Copyright -->
+    <div class="footer-bottom">
+      <p class="footer-copyright">&copy; 2026 ILFA is the official website of ILFA 10th Batch Union</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js"></script>
+  
+  <!-- Article Rendering Logic -->
+  <script>
+    const articles = {
+      "vamino": {
+        date: "2024-12-11",
+        title: "Darul Huda Ruby Jubilee: Vamino Message Rally to Begin on December 11",
+        lead: "The Vamino Caravan, part of the Darul Huda Ruby Jubilee celebrations, will embark on a nationwide journey to spread messages of education, social unity, and community progress.",
+        image: "files/vamino_logo.png",
+        body: [
+          "Odamala: The Vamino message rally, organized as part of the Darul Huda Islamic University Ruby Jubilee celebrations, is scheduled to commence on December 11. The caravan will travel across various states, conducting educational seminars, cultural meets, and community outreach programs to highlight the university's contribution to modern Islamic education and social reform.",
+          "The program will be flagged off by senior leaders and community scholars, driving positive change across the nation. The caravan is expected to cover over twenty key junctions, engaging local youth, promoting social harmony, and raising awareness about academic and social opportunities."
+        ],
+        tag: "General",
+        related: ["edukening", "episteme", "seven-books"]
+      },
+      "edukening": {
+        date: "2024-12-07",
+        title: "Edukening 2.0: Darul Huda and Doha Institute Academic Seminar Held on December 7",
+        lead: "The academic seminar Edukening 2.0 brought together scholars, researchers, and students from Darul Huda and Doha Institute for a dialogue on contemporary educational challenges.",
+        image: "files/annivPoster.jpg",
+        body: [
+          "Doha: The second edition of the academic seminar, Edukening 2.0, was jointly hosted by Darul Huda Islamic University and the Doha Institute. Keynote speeches and research presentations centered around educational developments, pedagogical reforms, and integration of traditional and modern sciences.",
+          "The event witnessed large participation from university alumni, resident scholars, and educational enthusiasts, leading to active academic discussions and intellectual exchanges. The seminar emphasized the need to build academic networks across global institutions to foster cooperative research and progressive teaching methodologies."
+        ],
+        tag: "General",
+        related: ["vamino", "mahmood-hudawi", "episteme"]
+      },
+      "mahmood-hudawi": {
+        date: "2024-11-20",
+        title: "Mahmood Hudawi Kooriya Wins Infosys Prize Worth ₹84 Lakhs",
+        lead: "Renowned historian and research scholar Dr. Mahmood Hudawi Kooriya has been awarded the prestigious Infosys Prize in Humanities for his outstanding research contributions.",
+        image: "files/member1.png",
+        body: [
+          "New Delhi: Dr. Mahmood Hudawi Kooriya, a distinguished alumnus of Darul Huda and a prominent historian, has been honored with the Infosys Prize in Humanities.",
+          "The prize, which includes a cash award of ₹84 lakhs and a gold medal, recognizes his pathbreaking research on maritime Islamic networks, Indian Ocean history, and the evolution of Islamic law in Southeast Asia and Malabar. This achievement stands as a monumental success for the community and reflects the academic excellence nurtured by our institutions."
+        ],
+        tag: "Achievements",
+        related: ["edukening", "librarians-summit", "treasure-hunt"]
+      },
+      "librarians-summit": {
+        date: "2024-11-15",
+        title: "\"Books Should Be Gateways to Broader Readership\": Librarians' Summit",
+        lead: "The National Librarians' Summit concluded with a call to make libraries more accessible, modern, and engaging centers of reading and research.",
+        image: "files/member2.png",
+        body: [
+          "Odamala: A grand Librarians' Summit was organized to address the future of reading and resource access in the digital era. Academic experts, librarians, and publishers gathered to discuss the theme \"Books as Gateways to Broader Readership\".",
+          "The sessions focused on digital archiving, modern library management systems, and community reading initiatives to re-engage the younger generation with physical and digital literature. The summit proposed several institutional reforms to upgrade reading facilities, noting that modern libraries must adapt to serve as interactive hubs of collaborative learning."
+        ],
+        tag: "Bookplus",
+        related: ["seven-books", "mahmood-hudawi", "kashmir-parvaz"]
+      },
+      "episteme": {
+        date: "2024-10-29",
+        title: "Episteme 24: A Successful Intellectual Gathering Hosted by Qatar Hadia",
+        lead: "Qatar Hadia hosted the grand academic conclave, Episteme 24, focusing on educational empowerment and intellectual responses to global trends.",
+        image: "files/news_seminar.png",
+        body: [
+          "Doha: Qatar Hadia hosted the grand academic conclave, Episteme 24, focusing on educational empowerment and intellectual responses to global trends. The gathering featured research panels, debates on contemporary ethics, and strategies for modern youth leadership.",
+          "Outstanding students were recognized for their academic accomplishments during the closing ceremony, which was attended by community leaders, educators, and Hadia executive members. The event successfully highlighted the role of student unions in driving academic excellence and professional networking."
+        ],
+        tag: "Qatar Hadia",
+        related: ["edukening", "vamino", "seven-books"]
+      },
+      "seven-books": {
+        date: "2024-10-25",
+        title: "Seven New Books Launched",
+        lead: "Writers Forum and Bookplus officially launched seven new titles, covering literature, philosophy, and history, written by talented batch members.",
+        image: "files/annivPoster.jpg",
+        body: [
+          "Odamala: In a significant literary milestone, seven new books authored by our students and alumni were released simultaneously. The books range from historical research and academic monographs to poetry compilations and moral essays.",
+          "The launching ceremony was attended by prominent publishers, senior teachers, and batch members, celebrating the creative output and academic contributions of our young writers to the local community. The writers were appreciated for their dedication to regional literature and academic publishing."
+        ],
+        tag: "Bookplus",
+        related: ["librarians-summit", "episteme", "kashmir-parvaz"]
+      },
+      "kashmir-parvaz": {
+        date: "2024-10-18",
+        title: "Igniting a Creative Renaissance in Kashmir with Parvaz",
+        lead: "Under the Kashmir Parvaz initiative, students hosted skill development workshops and creative reading clubs in Jammu & Kashmir.",
+        image: "files/news_community.png",
+        body: [
+          "Srinagar: The cultural and academic mission, Kashmir Parvaz, conducted a series of creative writing, translation, and public speaking camps for local students in Kashmir. The initiative aims to build creative bridges and promote cultural exchanges through interactive bootcamps and student discussions.",
+          "The local student communities and institutions highly appreciated the batch members for their engagement and educational leadership during the tour, marking it as a successful step towards community empowerment and regional cooperation."
+        ],
+        tag: "National Project",
+        related: ["librarians-summit", "seven-books", "treasure-hunt"]
+      },
+      "treasure-hunt": {
+        date: "2024-10-10",
+        title: "'Treasure hunt' in search of the treasure of historical memories",
+        lead: "The Hadia CSE team organized an exciting historical treasure hunt adventure, combining local historical search with physical clues.",
+        image: "files/news_sports.png",
+        body: [
+          "Odamala: A unique interactive adventure, the 'Treasure Hunt', was conducted by Hadia CSE to connect students with local historical sites and heritage landmarks. Teams deciphered riddles, searched for hidden artifacts, and explored local monuments.",
+          "Combining historical learning with team-building and physical challenge, the event drew massive enthusiasm and concluded with a prize distribution for the winning teams. Organizers promised to host similar historical exploration activities annually."
+        ],
+        tag: "Hadia CSE",
+        related: ["mahmood-hudawi", "kashmir-parvaz", "vamino"]
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Parse URL query parameter
+      const params = new URLSearchParams(window.location.search);
+      const articleId = params.get('id') || 'vamino';
+      
+      let article = null;
+      let isDynamic = false;
+
+      // 1. Try static articles first
+      if (articles[articleId]) {
+        article = articles[articleId];
+      } else {
+        // 2. Fetch from Supabase
+        const supabaseUrl = 'https://brgjroxykxdruyazhqmy.supabase.co';
+        const supabaseKey = 'sb_publishable_MfzuFBf0TaFfJh38ZOBw6w_GBw8AZ3q';
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        try {
+          const { data, error } = await supabaseClient
+            .from('news')
+            .select('*')
+            .eq('id', articleId)
+            .maybeSingle();
+
+          if (!error && data) {
+            // Map Supabase news row to matching details object format
+            article = {
+              date: data.date,
+              title: data.title,
+              lead: data.desc.substring(0, 150) + (data.desc.length > 150 ? '...' : ''),
+              image: data.image_url,
+              body: data.desc.split('\n').filter(p => p.trim() !== ''),
+              tag: data.tag,
+              related: []
+            };
+            isDynamic = true;
+          }
+        } catch (err) {
+          console.error("Error loading article from Supabase:", err);
+        }
+      }
+
+      // Fallback if not found
+      if (!article) {
+        article = articles['vamino'];
+      }
+      
+      // Load Main Article Content
+      document.getElementById('article-date').textContent = article.date;
+      document.getElementById('article-title').textContent = article.title;
+      document.getElementById('article-lead').textContent = article.lead;
+      
+      const imgEl = document.getElementById('article-image');
+      imgEl.src = article.image;
+      imgEl.alt = article.title;
+      
+      // Load Body Paragraphs
+      const bodyContainer = document.getElementById('article-body');
+      bodyContainer.innerHTML = '';
+      article.body.forEach(para => {
+        const p = document.createElement('p');
+        p.textContent = para;
+        bodyContainer.appendChild(p);
+      });
+      
+      // Load Related News Section
+      const relatedContainer = document.getElementById('related-news-container');
+      relatedContainer.innerHTML = '';
+      
+      if (isDynamic) {
+        // Fetch latest news of same tag or general from Supabase
+        try {
+          const supabaseUrl = 'https://brgjroxykxdruyazhqmy.supabase.co';
+          const supabaseKey = 'sb_publishable_MfzuFBf0TaFfJh38ZOBw6w_GBw8AZ3q';
+          const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+          const { data: relatedData, error: relatedErr } = await supabaseClient
+            .from('news')
+            .select('*')
+            .eq('tag', article.tag)
+            .neq('id', articleId)
+            .limit(3);
+
+          if (!relatedErr && relatedData && relatedData.length > 0) {
+            relatedData.forEach(item => {
+              const cardHtml = `
+                <div class="bento-card">
+                  <a href="news-detail.html?id=${item.id}" class="bento-card-split">
+                    <div class="split-image-container">
+                      <img src="${item.image_url}" alt="${item.title}" class="split-image">
+                      <span class="pill-badge">${item.tag}</span>
+                    </div>
+                    <div class="split-content-container">
+                      <h2 class="split-title">${item.title}</h2>
+                    </div>
+                  </a>
+                </div>
+              `;
+              relatedContainer.insertAdjacentHTML('beforeend', cardHtml);
+            });
+          }
+        } catch (err) {
+          console.error("Error loading related dynamic articles:", err);
+        }
+      } else {
+        // Load static related articles
+        article.related.forEach(relatedKey => {
+          const item = articles[relatedKey];
+          if (item) {
+            const cardHtml = `
+              <div class="bento-card">
+                <a href="news-detail.html?id=${relatedKey}" class="bento-card-split">
+                  <div class="split-image-container">
+                    <img src="${item.image}" alt="${item.title}" class="split-image">
+                    <span class="pill-badge">${item.tag}</span>
+                  </div>
+                  <div class="split-content-container">
+                    <h2 class="split-title">${item.title}</h2>
+                  </div>
+                </a>
+              </div>
+            `;
+            relatedContainer.insertAdjacentHTML('beforeend', cardHtml);
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

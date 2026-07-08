@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Achievements - ILFA 10th Batch Union</title>
+  <meta name="description" content="Achievements of ILFA - 10th Batch Union, Sheikh Fareed Auliya Da'wa College, Odamala.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="achievement.css">
+</head>
+<body>
+
+  <!-- Decorative Background Layout -->
+  <div class="bg-grid"></div>
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <!-- Floating Header Navigation -->
+  <header id="header">
+    <div class="header-container">
+      <a href="index.html#home" class="logo">
+        <img src="files/logo-black.png" alt="ILFA Logo" class="logo-img" id="logo-img">
+      </a>
+
+      <!-- Navigation Links -->
+      <nav aria-label="Main Navigation">
+        <ul class="nav-menu" id="nav-menu">
+          <li><a href="index.html#home" class="nav-link">Home</a></li>
+          <li class="nav-item-dropdown">
+            <a href="index.html#about" class="nav-link dropdown-toggle nav-link-with-arrow">About <span class="nav-arrow">&#9662;</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="committee.html" class="dropdown-item">Committee</a></li>
+            </ul>
+          </li>
+          <li><a href="news.html" class="nav-link">News&Events</a></li>
+          <li><a href="achievement.html" class="nav-link active">Achievements</a></li>
+        </ul>
+      </nav>
+
+      <!-- Grid Icon / Menu Indicator -->
+      <div class="header-right" id="mobile-toggle" aria-expanded="false" aria-controls="nav-menu">
+        <img src="files/5rec-bw.png" alt="Menu" class="grid-icon" id="toggle-icon">
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <section class="achievement-hero">
+      <div class="container text-center">
+        <span class="achievement-eyebrow">Milestones</span>
+        <h1 class="achievement-title">Our Achievements</h1>
+        <div class="about-divider"></div>
+        <p class="achievement-subtitle">A legacy of excellence in academic research, athletic performance, and impactful community leadership.</p>
+      </div>
+    </section>
+
+    <section class="achievement-section">
+      <div class="container achievement-grid" id="achievement-grid-container">
+        <!-- Achievement 1 -->
+        <div class="achievement-card">
+          <div class="achievement-image-wrapper">
+            <img src="files/news_sports.png" alt="Sports Championship" class="achievement-img">
+          </div>
+          <div class="achievement-info">
+            <h3 class="achievement-card-title">Sports Championship</h3>
+            <p class="achievement-card-desc">Secured the Overall Championship trophy at the Inter-collegiate Sports Meet, showcasing outstanding teamwork, athletic prowess, and discipline across multiple sports disciplines.</p>
+          </div>
+        </div>
+
+        <!-- Achievement 2 -->
+        <div class="achievement-card">
+          <div class="achievement-image-wrapper">
+            <img src="files/news_seminar.png" alt="Academic Conclave Winner" class="achievement-img">
+          </div>
+          <div class="achievement-info">
+            <h3 class="achievement-card-title">Academic Debate Winner</h3>
+            <p class="achievement-card-desc">Honored with the first prize at the State-Level Academic Seminar and Research Conclave for our research presentation on contemporary educational reforms and societal progress.</p>
+          </div>
+        </div>
+
+        <!-- Achievement 3 -->
+        <div class="achievement-card">
+          <div class="achievement-image-wrapper">
+            <img src="files/news_community.png" alt="Social Leadership Award" class="achievement-img">
+          </div>
+          <div class="achievement-info">
+            <h3 class="achievement-card-title">Social Leadership Award</h3>
+            <p class="achievement-card-desc">Received the Outstanding Social Initiative Award for student-led environmental cleanup, sustainable tree-planting initiatives, and local community support drives.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <!-- Logo Column -->
+      <div class="footer-logo-col">
+        <img src="files/logo.png" alt="ILFA Logo" class="footer-logo">
+      </div>
+      
+      <!-- About Column -->
+      <div class="footer-col">
+        <h3>About</h3>
+        <p>ILFA Students' Union of the 10th Batch at Sheikh Fareed Auliya Da'wa College, Odamala, is a student representative body established to promote unity, leadership, and positive change within our community.</p>
+      </div>
+      
+      <!-- Quick Links Column -->
+      <div class="footer-col">
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="index.html#home">Home</a></li>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="committee.html">Committee</a></li>
+          <li><a href="achievement.html">Achievements</a></li>
+        </ul>
+      </div>
+      
+      <!-- External Links Column -->
+      <div class="footer-col">
+        <h3>External Links</h3>
+        <ul class="footer-links">
+          <li><a href="https://dhiu.in/" target="_blank" rel="noopener">Darul Huda</a></li>
+          <li><a href="https://hadia.in/" target="_blank" rel="noopener">Hadia</a></li>
+          <li><a href="http://cse.hadia.in/" target="_blank" rel="noopener">CSE</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- Footer Bottom Copyright -->
+    <div class="footer-bottom">
+      <p class="footer-copyright">&copy; 2026 ILFA is the official website of ILFA 10th Batch Union</p>
+    </div>
+  </footer>
+
+  <!-- Supabase Integration -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const supabaseUrl = 'https://brgjroxykxdruyazhqmy.supabase.co';
+      const supabaseKey = 'sb_publishable_MfzuFBf0TaFfJh38ZOBw6w_GBw8AZ3q';
+      const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+      const gridContainer = document.getElementById('achievement-grid-container');
+      if (!gridContainer) return;
+
+      try {
+        const { data: achievements, error } = await supabaseClient
+          .from('achievements')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (achievements && achievements.length > 0) {
+          gridContainer.innerHTML = '';
+          achievements.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'achievement-card';
+            card.innerHTML = `
+              <div class="achievement-image-wrapper">
+                <img src="${item.image_url}" alt="${item.title}" class="achievement-img">
+              </div>
+              <div class="achievement-info">
+                <span class="achievement-card-pos">${item.pos}</span>
+                <h3 class="achievement-card-title">${item.title}</h3>
+                <p class="achievement-card-desc">${item.desc}</p>
+              </div>
+            `;
+            gridContainer.appendChild(card);
+          });
+        }
+      } catch (err) {
+        console.error("Error loading achievements from Supabase:", err);
+      }
+    });
+  </script>
+</body>
+</html>

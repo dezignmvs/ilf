@@ -1,0 +1,2169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - ILFA 10th Batch Union</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Supabase CDN Client Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        /* ==========================================================================
+       ADMIN PORTAL STYLES (MINIMALIST DASHBOARD UI)
+       ========================================================================== */
+        :root {
+            --admin-bg-sidebar: #ffffff;
+            --admin-bg-content: #fafafa;
+            --admin-border-color: #eaeaea;
+            --admin-card-bg: #ffffff;
+            --admin-text-dark: #111111;
+            --admin-text-muted: #888888;
+            --admin-accent-cyan: #1e6ee2;
+        }
+
+        body.admin-body {
+            background-color: var(--admin-bg-content);
+            font-family: var(--font-sans);
+            color: var(--admin-text-dark);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .admin-sidebar {
+            background-color: var(--admin-bg-sidebar);
+            color: var(--admin-text-dark);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--admin-border-color);
+            z-index: 10;
+        }
+
+        .admin-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+            text-decoration: none;
+            color: var(--admin-text-dark);
+        }
+
+        .admin-logo-img {
+            height: 36px;
+            width: auto;
+            filter: none;
+            /* Dark logo on white sidebar */
+        }
+
+        .admin-logo-text {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            color: var(--admin-text-dark);
+        }
+
+        .admin-nav {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex-grow: 1;
+        }
+
+        .admin-nav-item button {
+            width: 100%;
+            background: none;
+            border: none;
+            color: #666666;
+            padding: 10px 14px;
+            text-align: left;
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all var(--transition-fast);
+        }
+
+        .admin-nav-item button:hover {
+            background-color: #f5f5f5;
+            color: var(--admin-text-dark);
+        }
+
+        .admin-nav-item.active button {
+            background-color: #f1f5f9;
+            color: var(--brand-blue);
+            font-weight: 600;
+        }
+
+        .admin-sidebar-footer {
+            margin-top: auto;
+        }
+
+        .btn-back-home {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666666;
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 10px 14px;
+            border-radius: 6px;
+            transition: all var(--transition-fast);
+        }
+
+        .btn-back-home:hover {
+            background-color: #f5f5f5;
+            color: var(--admin-text-dark);
+        }
+
+        /* Content Area */
+        .admin-content {
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--admin-border-color);
+            padding-bottom: 20px;
+        }
+
+        .admin-title-desc h1 {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 0 0 6px 0;
+            color: var(--admin-text-dark);
+        }
+
+        .admin-title-desc p {
+            color: var(--admin-text-muted);
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        /* Dashboard Grid Panels */
+        .dashboard-panel {
+            display: none;
+        }
+
+        .dashboard-panel.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(4px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .grid-forms-lists {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        /* Card Panels */
+        .admin-card {
+            background-color: var(--admin-card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--admin-border-color);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .admin-card-title {
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--admin-text-dark);
+            border-bottom: 1px solid var(--admin-border-color);
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Form Fields */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--admin-text-dark);
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px 14px;
+            border: 1px solid var(--admin-border-color);
+            border-radius: 6px;
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            background-color: #ffffff;
+            color: var(--admin-text-dark);
+            transition: all var(--transition-fast);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--brand-blue);
+            box-shadow: 0 0 0 2px rgba(30, 110, 226, 0.08);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-submit {
+            background-color: var(--brand-blue);
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-family: var(--font-sans);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            background-color: #1a5ec4;
+        }
+
+        .btn-submit:disabled {
+            background-color: var(--admin-border-color);
+            color: var(--admin-text-muted);
+            cursor: not-allowed;
+        }
+
+        .btn-cancel {
+            background-color: #ffffff;
+            border: 1px solid var(--admin-border-color);
+            color: var(--admin-text-dark);
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-family: var(--font-sans);
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color var(--transition-fast);
+        }
+
+        .btn-cancel:hover {
+            background-color: var(--admin-bg-content);
+        }
+
+        /* List & Table Styling */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .admin-table th {
+            background-color: #fafafa;
+            padding: 12px 14px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--admin-text-muted);
+            border-bottom: 1px solid var(--admin-border-color);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .admin-table td {
+            padding: 14px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--admin-border-color);
+            vertical-align: middle;
+            color: var(--admin-text-dark);
+        }
+
+        .admin-table tr:hover td {
+            background-color: #fcfcfc;
+        }
+
+        .admin-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .cell-img-wrapper {
+            width: 44px;
+            aspect-ratio: 1;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid var(--admin-border-color);
+        }
+
+        .cell-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .cell-title {
+            font-weight: 600;
+            color: var(--admin-text-dark);
+        }
+
+        .cell-date {
+            color: var(--admin-text-muted);
+            font-size: 0.8rem;
+        }
+
+        .badge-tag {
+            display: inline-block;
+            background-color: #f1f5f9;
+            color: #475569;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-action {
+            background: none;
+            border: 1px solid var(--admin-border-color);
+            padding: 6px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+            color: #666666;
+        }
+
+        .btn-action.edit:hover {
+            background-color: rgba(30, 110, 226, 0.05);
+            border-color: var(--brand-blue);
+            color: var(--brand-blue);
+        }
+
+        .btn-action.delete:hover {
+            background-color: rgba(239, 68, 68, 0.05);
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        /* Custom Ordering List UI */
+        .reorder-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .reorder-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background-color: #ffffff;
+            padding: 12px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--admin-border-color);
+            transition: background-color var(--transition-fast);
+        }
+
+        .reorder-item:hover {
+            background-color: #fcfcfc;
+        }
+
+        .reorder-checkbox {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .reorder-details {
+            flex-grow: 1;
+        }
+
+        .reorder-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+
+        .reorder-meta {
+            font-size: 0.75rem;
+            color: var(--admin-text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .reorder-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .btn-order-arrow {
+            background-color: #ffffff;
+            border: 1px solid var(--admin-border-color);
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: var(--admin-text-dark);
+            transition: all var(--transition-fast);
+        }
+
+        .btn-order-arrow:hover:not(:disabled) {
+            background-color: #f1f5f9;
+            color: var(--admin-text-dark);
+        }
+
+        .btn-order-arrow:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* Tag List Management */
+        .tags-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .tag-manage-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            border: 1px solid var(--admin-border-color);
+        }
+
+        .tag-name-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Toast Notification Alert */
+        .admin-toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background-color: #111111;
+            color: #ffffff;
+            padding: 12px 20px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transform: translateY(40px);
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+        }
+
+        .admin-toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--admin-text-muted);
+            font-style: italic;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 992px) {
+            .admin-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-sidebar {
+                border-right: none;
+                border-bottom: 1px solid var(--admin-border-color);
+                padding: 20px;
+            }
+
+            .admin-logo {
+                margin-bottom: 20px;
+            }
+
+            .admin-nav {
+                flex-direction: row;
+                overflow-x: auto;
+            }
+
+            .admin-nav-item button {
+                white-space: nowrap;
+            }
+
+            .grid-forms-lists {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Submenu styling */
+        .admin-submenu {
+            display: none;
+        }
+
+        .admin-nav-item.active .admin-submenu {
+            display: flex;
+        }
+
+        .admin-submenu-item:hover {
+            background-color: #f1f5f9;
+            color: var(--brand-blue) !important;
+        }
+
+        .admin-submenu-item.active {
+            background-color: #e2e8f0;
+            color: var(--brand-blue) !important;
+            font-weight: 600 !important;
+        }
+
+        .admin-nav-item.active .submenu-arrow {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+
+<body class="admin-body">
+
+    <div class="admin-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="admin-sidebar">
+            <a href="index.html" class="admin-logo">
+                <img src="files/logo-black.png" alt="Logo" class="admin-logo-img">
+
+            </a>
+
+            <nav aria-label="Dashboard Panels">
+                <ul class="admin-nav">
+                    <li class="admin-nav-item active" id="nav-news-parent">
+                        <button class="nav-parent-btn" data-target="panel-news"
+                            style="display: flex; width: 100%; justify-content: space-between; align-items: center; border: none; background: none; cursor: pointer; padding: 10px 14px; text-align: left; font-family: var(--font-sans); font-size: 0.9rem; font-weight: 500; border-radius: 6px; color: #666666;">
+                            <span style="display: flex; align-items: center; gap: 10px;">
+                                <svg style="width:18px;height:18px" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <polyline points="10 9 9 9 8 9"></polyline>
+                                </svg>
+                                News & Events
+                            </span>
+                            <span class="submenu-arrow" style="transition: transform 0.2s;">&#9662;</span>
+                        </button>
+                        <ul class="admin-submenu" id="news-submenu"
+                            style="list-style: none; padding-left: 28px; margin: 4px 0 0 0; display: flex; flex-direction: column; gap: 4px;">
+                            <li class="admin-submenu-item" data-target="panel-news-homepage"
+                                style="padding: 6px 12px; font-size: 0.85rem; color: #666; cursor: pointer; border-radius: 6px; transition: all 0.2s; font-weight: 500;">
+                                Homepage Settings
+                            </li>
+                            <li class="admin-submenu-item" data-target="panel-news-newspage"
+                                style="padding: 6px 12px; font-size: 0.85rem; color: #666; cursor: pointer; border-radius: 6px; transition: all 0.2s; font-weight: 500;">
+                                Newspage Settings
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="admin-nav-item" data-target="panel-tags">
+                        <button><svg style="width:18px;height:18px" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path
+                                    d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z">
+                                </path>
+                                <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                            </svg> Manage Tags</button>
+                    </li>
+                    <li class="admin-nav-item" data-target="panel-achievements">
+                        <button><svg style="width:18px;height:18px" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path
+                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z">
+                                </path>
+                            </svg> Achievements</button>
+                    </li>
+                    <li class="admin-nav-item" data-target="panel-committee">
+                        <button><svg style="width:18px;height:18px" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg> Committee</button>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="admin-sidebar-footer">
+                <a href="index.html" class="btn-back-home">
+                    <svg style="width:16px;height:16px" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    Back to Live Site
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content Panels -->
+        <main class="admin-content">
+
+            <!-- Panel 1: News & Events Manager -->
+            <section class="dashboard-panel active" id="panel-news">
+                <div class="admin-header">
+                    <div class="admin-title-desc">
+                        <h1>News & Events Manager</h1>
+                        <p>Upload articles, upload images, manage tags, and manage existing articles.</p>
+                    </div>
+                </div>
+
+                <div class="grid-forms-lists">
+                    <!-- Left: Upload/Edit Form -->
+                    <div class="admin-card">
+                        <h2 class="admin-card-title" id="news-form-title">Enter News Data</h2>
+                        <form id="news-form">
+                            <input type="hidden" id="news-edit-id" value="">
+
+                            <div class="form-group">
+                                <label for="news-title" class="form-label">Article Title</label>
+                                <input type="text" id="news-title" class="form-control"
+                                    placeholder="Enter article title" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="news-desc" class="form-label">Description (Full Article Content)</label>
+                                <textarea id="news-desc" class="form-control" placeholder="Enter detailed news content"
+                                    required></textarea>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="news-date" class="form-label">Publish Date</label>
+                                    <input type="date" id="news-date" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="news-tag" class="form-label">Tag Category</label>
+                                    <select id="news-tag" class="form-control" required>
+                                        <!-- Options populated dynamically -->
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="news-image-file" class="form-label">Article Image</label>
+                                <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 8px;">
+                                    <input type="file" id="news-image-file" class="form-control" accept="image/*">
+                                    <span id="news-upload-spinner"
+                                        style="display: none; font-size: 0.85rem; color: var(--brand-blue); white-space: nowrap; font-weight: 500;">
+                                        Uploading to Cloudinary...
+                                    </span>
+                                </div>
+                                <input type="text" id="news-image-url" class="form-control"
+                                    placeholder="Or enter direct image URL" required>
+                                <p style="font-size:0.8rem;color:var(--admin-text-muted);margin:6px 0 0 0;">Upload an
+                                    image from your device to Cloudinary, or paste an external URL.</p>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" class="btn-cancel" id="btn-reset-news">Clear</button>
+                                <button type="submit" class="btn-submit" id="btn-save-news">Save Article</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Right: Existing News Table -->
+                    <div class="admin-card">
+                        <h2 class="admin-card-title">All News Articles</h2>
+                        <div class="table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 80px;">Image</th>
+                                        <th>Article Detail</th>
+                                        <th>Tag</th>
+                                        <th style="width: 100px;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="news-table-body">
+                                    <!-- Rows populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Panel 1a: Homepage Settings -->
+            <section class="dashboard-panel" id="panel-news-homepage">
+                <div class="admin-header">
+                    <div class="admin-title-desc">
+                        <h1>Homepage News Settings</h1>
+                        <p>Select which articles appear in the homepage slider, set the display count, and order them.
+                        </p>
+                    </div>
+                </div>
+
+                <div style="max-width: 600px; margin: 0 auto;">
+                    <div class="admin-card">
+                        <h2 class="admin-card-title">Homepage News Configuration</h2>
+                        <p style="font-size:0.85rem;color:var(--admin-text-muted);margin-top:0;margin-bottom:16px;">
+                            Specify how many news articles to show on the homepage, select which articles to display,
+                            and arrange their order.
+                        </p>
+
+                        <div id="homepage-settings-db-warning"
+                            style="display: none; padding: 12px; background-color: #fef2f2; border: 1px solid #fee2e2; border-radius: 6px; margin-bottom: 16px; font-size: 0.85rem; color: #991b1b;">
+                            <strong>Database Table Missing:</strong> The <code>settings</code> table was not found in
+                            Supabase. Please copy and execute the SQL script in your Supabase SQL Editor.
+                        </div>
+
+                        <div class="form-group">
+                            <label for="homepage-news-count" class="form-label">News Count to Display</label>
+                            <input type="number" id="homepage-news-count" class="form-control" min="1" max="10"
+                                value="4">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Select Articles and Order</label>
+                            <div id="homepage-news-slots" style="display: flex; flex-direction: column; gap: 12px;">
+                                <!-- Slot selects will be generated dynamically -->
+                            </div>
+                        </div>
+
+                        <div class="form-actions" style="margin-top: 24px;">
+                            <button type="button" class="btn-submit" id="btn-save-homepage-settings">Save Homepage
+                                Settings</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Panel 1b: Newspage Settings -->
+            <section class="dashboard-panel" id="panel-news-newspage">
+                <div class="admin-header">
+                    <div class="admin-title-desc">
+                        <h1>News Page Featured Settings</h1>
+                        <p>Select the 4 main articles displayed in the top bento grid of the News & Events page.</p>
+                    </div>
+                </div>
+
+                <div style="max-width: 600px; margin: 0 auto;">
+                    <div class="admin-card">
+                        <h2 class="admin-card-title">News Page Top 4 Bento Settings</h2>
+                        <p style="font-size:0.85rem;color:var(--admin-text-muted);margin-top:0;margin-bottom:16px;">
+                            Select the 4 news articles to display in the top bento grid of the News page.
+                        </p>
+
+                        <div class="form-group">
+                            <div id="newspage-news-slots" style="display: flex; flex-direction: column; gap: 12px;">
+                                <!-- Slot selects will be generated dynamically -->
+                            </div>
+                        </div>
+
+                        <div class="form-actions" style="margin-top: 24px;">
+                            <button type="button" class="btn-submit" id="btn-save-newspage-settings">Save News Page
+                                Settings</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Panel 2: Tags Manager -->
+            <section class="dashboard-panel" id="panel-tags">
+                <div class="admin-header">
+                    <div class="admin-title-desc">
+                        <h1>Tag Categories Manager</h1>
+                        <p>Define new categories, edit tags, and clean up labels in Supabase.</p>
+                    </div>
+                </div>
+
+                <div class="grid-forms-lists">
+                    <!-- Left: Tag Form -->
+                    <div class="admin-card">
+                        <h2 class="admin-card-title" id="tag-form-title">Add Tag</h2>
+                        <form id="tag-form">
+                            <input type="hidden" id="tag-edit-id" value="">
+                            <div class="form-group">
+                                <label for="tag-name" class="form-label">Tag Name</label>
+                                <input type="text" id="tag-name" class="form-control"
+                                    placeholder="e.g., Sports, Exams, Academic" required>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn-cancel" id="btn-reset-tag">Clear</button>
+                                <button type="submit" class="btn-submit" id="btn-save-tag">Save Tag</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Right: Tags List -->
+                    <div class="admin-card">
+                        <h2 class="admin-card-title">Active Categories</h2>
+                        <div class="tags-container" id="tags-list-container">
+                            <!-- Loaded dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Panel 3: Achievements -->
+            <section class="dashboard-panel" id="panel-achievements">
+                <div class="admin-header">
+                    <div class="admin-title-desc">
+                        <h1>Achievements Manager</h1>
+                        <p>Upload milestones, student qualifications, achievements, and manage outstanding awards.</p>
+                    </div>
+                </div>
+
+                <div class="grid-forms-lists">
+                    <!-- Left: Form -->
+                    <div class="admin-card">
+                        <h2 class="admin-card-title" id="achievement-form-title">Enter Achievement Details</h2>
+                        <form id="achievement-form">
+                            <input type="hidden" id="achievement-edit-id" value="">
+
+                            <div class="form-group">
+                                <label for="achievement-title" class="form-label">Achievement Title</label>
+                                <input type="text" id="achievement-title" class="form-control"
+                                    placeholder="e.g., Overall Sports Championship" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="achievement-pos" class="form-label">Position / Qualification</label>
+                                <input type="text" id="achievement-pos" class="form-control"
+                                    placeholder="e.g., 1st Prize / Grade A" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="achievement-desc" class="form-label">Description</label>
+                                <textarea id="achievement-desc" class="form-control"
+                                    placeholder="Describe the achievement milestones, team details, or context"
+                                    required></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="achievement-image-file" class="form-label">Achievement Image</label>
+                                <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 8px;">
+                                    <input type="file" id="achievement-image-file" class="form-control"
+                                        accept="image/*">
+                                    <span id="achievement-upload-spinner"
+                                        style="display: none; font-size: 0.85rem; color: var(--brand-blue); white-space: nowrap; font-weight: 500;">
+                                        Uploading to Cloudinary...
+                                    </span>
+                                </div>
+                                <input type="text" id="achievement-image-url" class="form-control"
+                                    placeholder="Or enter direct image URL" required>
+                                <p style="font-size:0.8rem;color:var(--admin-text-muted);margin:6px 0 0 0;">Upload an
+                                    image from your device to Cloudinary, or paste an external URL.</p>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" class="btn-cancel" id="btn-reset-achievement">Clear</button>
+                                <button type="submit" class="btn-submit" id="btn-save-achievement">Save
+                                    Achievement</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Right: Achievements list -->
+                    <div class="admin-card">
+                        <h2 class="admin-card-title">Manage Achievements</h2>
+                        <div class="table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 80px;">Image</th>
+                                        <th>Detail</th>
+                                        <th>Sub-Header</th>
+                                        <th style="width: 100px;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="achievements-table-body">
+                                    <!-- Loaded dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Panel 4: Committee Manager -->
+            <section class="dashboard-panel" id="panel-committee">
+                <div class="admin-header">
+                    <div class="admin-title-desc">
+                        <h1>Committee Manager</h1>
+                        <p>Add, edit, or remove executive committee members.</p>
+                    </div>
+                </div>
+
+                <div class="grid-forms-lists">
+                    <!-- Left: Upload/Edit Form -->
+                    <div class="admin-card">
+                        <h2 class="admin-card-title" id="committee-form-title">Enter Committee Member Data</h2>
+                        <form id="committee-form">
+                            <input type="hidden" id="committee-edit-id" value="">
+
+                            <div class="form-group">
+                                <label for="committee-name" class="form-label">Member Name</label>
+                                <input type="text" id="committee-name" class="form-control"
+                                    placeholder="Enter member's name" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="committee-position" class="form-label">Position / Role</label>
+                                <input type="text" id="committee-position" class="form-control"
+                                    placeholder="e.g., President, Secretary, Treasurer" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="committee-place" class="form-label">Place / Location</label>
+                                <input type="text" id="committee-place" class="form-control"
+                                    placeholder="Enter hometown or area" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="committee-image-file" class="form-label">Profile Image</label>
+                                <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 8px;">
+                                    <input type="file" id="committee-image-file" class="form-control"
+                                        accept="image/*">
+                                    <span id="committee-upload-spinner"
+                                        style="display: none; font-size: 0.85rem; color: var(--brand-blue); white-space: nowrap; font-weight: 500;">
+                                        Uploading to Cloudinary...
+                                    </span>
+                                </div>
+                                <input type="text" id="committee-image-url" class="form-control"
+                                    placeholder="Or enter direct image URL" required>
+                                <p style="font-size:0.8rem;color:var(--admin-text-muted);margin:6px 0 0 0;">Upload an
+                                    image from your device to Cloudinary, or paste an external URL.</p>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" class="btn-cancel" id="btn-reset-committee">Clear</button>
+                                <button type="submit" class="btn-submit" id="btn-save-committee">Save Member</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Right: Committee list -->
+                    <div class="admin-card">
+                        <h2 class="admin-card-title">Manage Committee Members</h2>
+                        <div class="table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 80px;">Image</th>
+                                        <th>Name</th>
+                                        <th>Position & Place</th>
+                                        <th style="width: 100px;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="committee-table-body">
+                                    <!-- Loaded dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="admin-toast success" id="admin-toast">
+        <svg style="width:20px;height:20px;color:var(--admin-accent-cyan)" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span id="toast-message">Data saved successfully!</span>
+    </div>
+
+    <!-- Dashboard Script Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // ==========================================================================
+            // 1. DATABASE CONFIGURATION (SUPABASE + CLOUDINARY)
+            // ==========================================================================
+            const supabaseUrl = 'https://brgjroxykxdruyazhqmy.supabase.co';
+            const supabaseKey = 'sb_publishable_MfzuFBf0TaFfJh38ZOBw6w_GBw8AZ3q';
+
+            // Initialize Supabase Client
+            const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+            // Cloudinary configuration
+            const cloudinaryCloudName = 'da6fjyirm';
+            const cloudinaryUploadPreset = 'ilfaDB';
+
+            // Local State Arrays
+            let tags = [];
+            let news = [];
+            let achievements = [];
+            let committee = [];
+
+            // ==========================================================================
+            // 2. TABS NAVIGATION SYSTEM (WITH SUBMENU NAVIGATION)
+            // ==========================================================================
+            const navItems = document.querySelectorAll('.admin-nav-item');
+            const submenuItems = document.querySelectorAll('.admin-submenu-item');
+            const panels = document.querySelectorAll('.dashboard-panel');
+            const navNewsParent = document.getElementById('nav-news-parent');
+            const parentNewsBtn = document.querySelector('.nav-parent-btn');
+
+            const deactivateAll = () => {
+                navItems.forEach(i => i.classList.remove('active'));
+                submenuItems.forEach(i => i.classList.remove('active'));
+                panels.forEach(p => p.classList.remove('active'));
+            };
+
+            navItems.forEach(item => {
+                if (item.id === 'nav-news-parent') return;
+
+                item.addEventListener('click', () => {
+                    deactivateAll();
+                    item.classList.add('active');
+                    const target = item.getAttribute('data-target');
+                    if (target) {
+                        document.getElementById(target).classList.add('active');
+                    }
+                });
+            });
+
+            if (parentNewsBtn) {
+                parentNewsBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const target = parentNewsBtn.getAttribute('data-target') || 'panel-news';
+
+                    deactivateAll();
+                    navNewsParent.classList.add('active');
+                    document.getElementById(target).classList.add('active');
+                });
+            }
+
+            submenuItems.forEach(subItem => {
+                subItem.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const target = subItem.getAttribute('data-target');
+
+                    deactivateAll();
+                    navNewsParent.classList.add('active');
+                    subItem.classList.add('active');
+
+                    if (target) {
+                        document.getElementById(target).classList.add('active');
+                    }
+                });
+            });
+
+            // ==========================================================================
+            // 3. TOAST NOTIFICATION HELPERS
+            // ==========================================================================
+            const toast = document.getElementById('admin-toast');
+            const toastMessage = document.getElementById('toast-message');
+
+            const showToast = (message, isSuccess = true) => {
+                toastMessage.innerText = message;
+                toast.className = `admin-toast show ${isSuccess ? 'success' : ''}`;
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            };
+
+            // ==========================================================================
+            // 4. CLOUDINARY UPLOAD LOGIC
+            // ==========================================================================
+            const uploadToCloudinary = async (file) => {
+                const url = `https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/image/upload`;
+
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('upload_preset', cloudinaryUploadPreset);
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const err = await response.json();
+                    throw new Error(err.error?.message || 'Failed to upload image to Cloudinary.');
+                }
+
+                const data = await response.json();
+                return data.secure_url;
+            };
+
+            const handleImageUpload = async (fileInput, previewUrlInput, spinnerElement, submitButton) => {
+                if (fileInput.files.length === 0) return previewUrlInput.value;
+
+                const file = fileInput.files[0];
+                spinnerElement.style.display = 'inline-block';
+                submitButton.disabled = true;
+
+                try {
+                    const uploadedUrl = await uploadToCloudinary(file);
+                    previewUrlInput.value = uploadedUrl;
+                    showToast("Image uploaded to Cloudinary!");
+                    return uploadedUrl;
+                } catch (err) {
+                    console.error("Cloudinary upload error:", err);
+                    showToast("Image upload failed: " + err.message, false);
+                    return null;
+                } finally {
+                    spinnerElement.style.display = 'none';
+                    submitButton.disabled = false;
+                    fileInput.value = ''; // Reset file input
+                }
+            };
+
+            // Auto-upload when file is selected
+            const newsImageFile = document.getElementById('news-image-file');
+            const newsImageUrl = document.getElementById('news-image-url');
+            const newsUploadSpinner = document.getElementById('news-upload-spinner');
+            const btnSaveNews = document.getElementById('btn-save-news');
+
+            newsImageFile.addEventListener('change', async () => {
+                await handleImageUpload(newsImageFile, newsImageUrl, newsUploadSpinner, btnSaveNews);
+            });
+
+            const achImageFile = document.getElementById('achievement-image-file');
+            const achImageUrl = document.getElementById('achievement-image-url');
+            const achUploadSpinner = document.getElementById('achievement-upload-spinner');
+            const btnSaveAchievement = document.getElementById('btn-save-achievement');
+
+            achImageFile.addEventListener('change', async () => {
+                await handleImageUpload(achImageFile, achImageUrl, achUploadSpinner, btnSaveAchievement);
+            });
+
+            const commImageFile = document.getElementById('committee-image-file');
+            const commImageUrl = document.getElementById('committee-image-url');
+            const commUploadSpinner = document.getElementById('committee-upload-spinner');
+            const btnSaveCommittee = document.getElementById('btn-save-committee');
+
+            commImageFile.addEventListener('change', async () => {
+                await handleImageUpload(commImageFile, commImageUrl, commUploadSpinner, btnSaveCommittee);
+            });
+
+            // ==========================================================================
+            // 5. TAGS CONTROLLER (READ/WRITE SUPABASE)
+            // ==========================================================================
+            const tagForm = document.getElementById('tag-form');
+            const tagInput = document.getElementById('tag-name');
+            const tagEditId = document.getElementById('tag-edit-id');
+            const tagFormTitle = document.getElementById('tag-form-title');
+            const tagsListContainer = document.getElementById('tags-list-container');
+            const newsTagSelector = document.getElementById('news-tag');
+
+            const loadTags = async () => {
+                const { data, error } = await supabaseClient
+                    .from('tags')
+                    .select('*')
+                    .order('name', { ascending: true });
+
+                if (error) {
+                    console.error("Error loading tags:", error);
+                    showToast("Failed to load tags from Supabase", false);
+                    return;
+                }
+
+                tags = data || [];
+                renderTags();
+            };
+
+            const renderTags = () => {
+                tagsListContainer.innerHTML = '';
+                newsTagSelector.innerHTML = '';
+
+                if (tags.length === 0) {
+                    tagsListContainer.innerHTML = '<div class="empty-state">No categories available. Add one.</div>';
+                    return;
+                }
+
+                tags.forEach((tag) => {
+                    // Render in Tag Manager
+                    const row = document.createElement('div');
+                    row.className = 'tag-manage-row';
+                    row.innerHTML = `
+            <div class="tag-name-wrapper">
+              <span class="badge-tag">${tag.name}</span>
+            </div>
+            <div class="action-btns">
+              <button class="btn-action edit" data-id="${tag.id}" data-name="${tag.name}"><svg style="width:16px;height:16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>
+              <button class="btn-action delete" data-id="${tag.id}" data-name="${tag.name}"><svg style="width:16px;height:16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></button>
+            </div>
+          `;
+                    tagsListContainer.appendChild(row);
+
+                    // Render Options in News Form Dropdown
+                    const option = document.createElement('option');
+                    option.value = tag.name;
+                    option.innerText = tag.name;
+                    newsTagSelector.appendChild(option);
+                });
+
+                // Add Listeners
+                tagsListContainer.querySelectorAll('.btn-action.edit').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const id = btn.getAttribute('data-id');
+                        const name = btn.getAttribute('data-name');
+                        tagInput.value = name;
+                        tagEditId.value = id;
+                        tagFormTitle.innerText = "Edit Tag";
+                    });
+                });
+
+                tagsListContainer.querySelectorAll('.btn-action.delete').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        const id = btn.getAttribute('data-id');
+                        const name = btn.getAttribute('data-name');
+
+                        const { error } = await supabaseClient
+                            .from('tags')
+                            .delete()
+                            .eq('id', id);
+
+                        if (error) {
+                            console.error("Error deleting tag:", error);
+                            showToast("Failed to delete tag", false);
+                            return;
+                        }
+
+                        showToast(`Tag "${name}" deleted!`);
+                        await loadTags();
+                    });
+                });
+            };
+
+            tagForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const value = tagInput.value.trim();
+                const editId = tagEditId.value;
+
+                if (editId === '') {
+                    // Add new tag to Supabase
+                    if (tags.some(t => t.name.toLowerCase() === value.toLowerCase())) {
+                        showToast("Tag already exists!", false);
+                        return;
+                    }
+
+                    const { error } = await supabaseClient
+                        .from('tags')
+                        .insert([{ name: value }]);
+
+                    if (error) {
+                        console.error("Error saving tag:", error);
+                        showToast("Failed to add tag", false);
+                        return;
+                    }
+                    showToast(`Tag "${value}" added successfully!`);
+                } else {
+                    // Edit existing tag in Supabase
+                    const { error } = await supabaseClient
+                        .from('tags')
+                        .update({ name: value })
+                        .eq('id', editId);
+
+                    if (error) {
+                        console.error("Error updating tag:", error);
+                        showToast("Failed to update tag", false);
+                        return;
+                    }
+                    showToast(`Tag updated to "${value}"!`);
+                }
+
+                tagForm.reset();
+                tagEditId.value = '';
+                tagFormTitle.innerText = "Add Tag";
+                await loadTags();
+                await loadNews();
+            });
+
+            document.getElementById('btn-reset-tag').addEventListener('click', () => {
+                tagForm.reset();
+                tagEditId.value = '';
+                tagFormTitle.innerText = "Add Tag";
+            });
+
+            // ==========================================================================
+            // 6. NEWS & CAROUSEL CONTROLLER (READ/WRITE SUPABASE)
+            // ==========================================================================
+            const newsForm = document.getElementById('news-form');
+            const newsTitle = document.getElementById('news-title');
+            const newsDesc = document.getElementById('news-desc');
+            const newsDate = document.getElementById('news-date');
+            const newsTag = document.getElementById('news-tag');
+            const newsEditId = document.getElementById('news-edit-id');
+            const newsFormTitle = document.getElementById('news-form-title');
+
+            const newsTableBody = document.getElementById('news-table-body');
+
+            const homepageNewsCountInput = document.getElementById('homepage-news-count');
+            const homepageNewsSlotsContainer = document.getElementById('homepage-news-slots');
+            const btnSaveHomepageSettings = document.getElementById('btn-save-homepage-settings');
+
+            const newspageNewsSlotsContainer = document.getElementById('newspage-news-slots');
+            const btnSaveNewspageSettings = document.getElementById('btn-save-newspage-settings');
+
+            const dbWarningBanner = document.getElementById('homepage-settings-db-warning');
+
+            let homepageSettings = { count: 4, selected_ids: ['', '', '', ''] };
+            let newspageSettings = { selected_ids: ['', '', '', ''] };
+
+            const loadHomepageSettings = async () => {
+                if (!dbWarningBanner) return;
+                dbWarningBanner.style.display = 'none';
+                try {
+                    const { data, error } = await supabaseClient
+                        .from('settings')
+                        .select('*')
+                        .eq('key', 'homepage_news_settings')
+                        .maybeSingle();
+
+                    if (error) {
+                        if (error.code === 'PGRST116' || error.message.includes('relation "settings" does not exist')) {
+                            console.warn("Settings table does not exist. Please run SQL schema.");
+                            dbWarningBanner.style.display = 'block';
+                            return;
+                        }
+                        throw error;
+                    }
+
+                    if (data && data.value) {
+                        homepageSettings = data.value;
+                        if (!homepageSettings.count) homepageSettings.count = 4;
+                        if (!homepageSettings.selected_ids) homepageSettings.selected_ids = [];
+                        while (homepageSettings.selected_ids.length < homepageSettings.count) homepageSettings.selected_ids.push('');
+                        homepageSettings.selected_ids = homepageSettings.selected_ids.slice(0, homepageSettings.count);
+                    } else {
+                        homepageSettings = { count: 4, selected_ids: ['', '', '', ''] };
+                    }
+
+                    if (homepageNewsCountInput) {
+                        homepageNewsCountInput.value = homepageSettings.count;
+                    }
+                    renderHomepageSettingsSlots();
+                } catch (err) {
+                    console.error("Error loading homepage settings:", err);
+                    if (err.message && err.message.includes('relation "settings" does not exist')) {
+                        dbWarningBanner.style.display = 'block';
+                    } else {
+                        showToast("Failed to load homepage settings", false);
+                    }
+                }
+            };
+
+            const renderHomepageSettingsSlots = () => {
+                if (!homepageNewsSlotsContainer) return;
+                homepageNewsSlotsContainer.innerHTML = '';
+                const count = homepageSettings.count || 4;
+
+                for (let i = 0; i < count; i++) {
+                    const slotDiv = document.createElement('div');
+                    slotDiv.style.display = 'flex';
+                    slotDiv.style.alignItems = 'center';
+                    slotDiv.style.gap = '10px';
+
+                    const label = document.createElement('span');
+                    label.innerText = `Slot ${i + 1}:`;
+                    label.style.fontWeight = '600';
+                    label.style.fontSize = '0.85rem';
+                    label.style.width = '60px';
+
+                    const select = document.createElement('select');
+                    select.className = 'form-control slot-select-home';
+                    select.setAttribute('data-slot', i);
+
+                    const defaultOpt = document.createElement('option');
+                    defaultOpt.value = '';
+                    defaultOpt.innerText = '-- Select a News Article --';
+                    select.appendChild(defaultOpt);
+
+                    news.forEach(item => {
+                        const opt = document.createElement('option');
+                        opt.value = item.id;
+                        opt.innerText = `[${item.tag}] ${item.title}`;
+                        select.appendChild(opt);
+                    });
+
+                    const savedId = homepageSettings.selected_ids[i];
+                    if (savedId && news.some(n => n.id.toString() === savedId.toString())) {
+                        select.value = savedId;
+                    }
+
+                    slotDiv.appendChild(label);
+                    slotDiv.appendChild(select);
+                    homepageNewsSlotsContainer.appendChild(slotDiv);
+                }
+            };
+
+            if (homepageNewsCountInput) {
+                homepageNewsCountInput.addEventListener('input', () => {
+                    const count = parseInt(homepageNewsCountInput.value) || 4;
+                    const currentSelects = homepageNewsSlotsContainer.querySelectorAll('.slot-select-home');
+                    const selectedIds = [];
+                    currentSelects.forEach(sel => {
+                        selectedIds.push(sel.value || '');
+                    });
+
+                    while (selectedIds.length < count) {
+                        selectedIds.push('');
+                    }
+                    homepageSettings.selected_ids = selectedIds.slice(0, count);
+                    homepageSettings.count = count;
+                    renderHomepageSettingsSlots();
+                });
+            }
+
+            if (btnSaveHomepageSettings) {
+                btnSaveHomepageSettings.addEventListener('click', async () => {
+                    const selectElements = homepageNewsSlotsContainer.querySelectorAll('.slot-select-home');
+                    const selectedIds = [];
+                    selectElements.forEach(select => {
+                        selectedIds.push(select.value || '');
+                    });
+
+                    homepageSettings.count = parseInt(homepageNewsCountInput.value) || 4;
+                    homepageSettings.selected_ids = selectedIds;
+
+                    try {
+                        const { error } = await supabaseClient
+                            .from('settings')
+                            .upsert({
+                                key: 'homepage_news_settings',
+                                value: homepageSettings
+                            });
+
+                        if (error) throw error;
+
+                        showToast("Homepage news settings saved successfully!");
+                    } catch (err) {
+                        console.error("Error saving homepage settings:", err);
+                        if (err.message && err.message.includes('relation "settings" does not exist')) {
+                            dbWarningBanner.style.display = 'block';
+                            showToast("Save failed: 'settings' table not found", false);
+                        } else {
+                            showToast("Failed to save homepage settings", false);
+                        }
+                    }
+                });
+            }
+
+            // ==========================================================================
+            // NEWS PAGE SETTINGS (READ/WRITE SUPABASE)
+            // ==========================================================================
+            const loadNewspageSettings = async () => {
+                try {
+                    const { data, error } = await supabaseClient
+                        .from('settings')
+                        .select('*')
+                        .eq('key', 'news_page_settings')
+                        .maybeSingle();
+
+                    if (error) {
+                        if (error.code === 'PGRST116' || error.message.includes('relation "settings" does not exist')) {
+                            return;
+                        }
+                        throw error;
+                    }
+
+                    if (data && data.value) {
+                        newspageSettings = data.value;
+                        if (!newspageSettings.selected_ids) newspageSettings.selected_ids = ['', '', '', ''];
+                        while (newspageSettings.selected_ids.length < 4) newspageSettings.selected_ids.push('');
+                        newspageSettings.selected_ids = newspageSettings.selected_ids.slice(0, 4);
+                    } else {
+                        newspageSettings = { selected_ids: ['', '', '', ''] };
+                    }
+
+                    renderNewspageSettingsSlots();
+                } catch (err) {
+                    console.error("Error loading news page settings:", err);
+                }
+            };
+
+            const renderNewspageSettingsSlots = () => {
+                if (!newspageNewsSlotsContainer) return;
+                newspageNewsSlotsContainer.innerHTML = '';
+
+                for (let i = 0; i < 4; i++) {
+                    const slotDiv = document.createElement('div');
+                    slotDiv.style.display = 'flex';
+                    slotDiv.style.alignItems = 'center';
+                    slotDiv.style.gap = '10px';
+
+                    const label = document.createElement('span');
+                    label.innerText = `Slot ${i + 1}:`;
+                    label.style.fontWeight = '600';
+                    label.style.fontSize = '0.85rem';
+                    label.style.width = '60px';
+
+                    const select = document.createElement('select');
+                    select.className = 'form-control slot-select-news';
+                    select.setAttribute('data-slot', i);
+
+                    const defaultOpt = document.createElement('option');
+                    defaultOpt.value = '';
+                    defaultOpt.innerText = '-- Select a News Article --';
+                    select.appendChild(defaultOpt);
+
+                    news.forEach(item => {
+                        const opt = document.createElement('option');
+                        opt.value = item.id;
+                        opt.innerText = `[${item.tag}] ${item.title}`;
+                        select.appendChild(opt);
+                    });
+
+                    const savedId = newspageSettings.selected_ids[i];
+                    if (savedId && news.some(n => n.id.toString() === savedId.toString())) {
+                        select.value = savedId;
+                    }
+
+                    slotDiv.appendChild(label);
+                    slotDiv.appendChild(select);
+                    newspageNewsSlotsContainer.appendChild(slotDiv);
+                }
+            };
+
+            if (btnSaveNewspageSettings) {
+                btnSaveNewspageSettings.addEventListener('click', async () => {
+                    const selectElements = newspageNewsSlotsContainer.querySelectorAll('.slot-select-news');
+                    const selectedIds = [];
+                    selectElements.forEach(select => {
+                        selectedIds.push(select.value || '');
+                    });
+
+                    newspageSettings.selected_ids = selectedIds;
+
+                    try {
+                        const { error } = await supabaseClient
+                            .from('settings')
+                            .upsert({
+                                key: 'news_page_settings',
+                                value: newspageSettings
+                            });
+
+                        if (error) throw error;
+
+                        showToast("News page bento settings saved successfully!");
+                    } catch (err) {
+                        console.error("Error saving news page settings:", err);
+                        showToast("Failed to save news page settings", false);
+                    }
+                });
+            }
+
+            const loadNews = async () => {
+                const { data, error } = await supabaseClient
+                    .from('news')
+                    .select('*')
+                    .order('date', { ascending: false });
+
+                if (error) {
+                    console.error("Error loading news:", error);
+                    showToast("Failed to load articles", false);
+                    return;
+                }
+
+                news = data || [];
+                renderNews();
+                await loadHomepageSettings();
+                await loadNewspageSettings();
+            };
+
+            const renderNews = () => {
+                newsTableBody.innerHTML = '';
+
+                if (news.length === 0) {
+                    newsTableBody.innerHTML = '<tr><td colspan="4" class="empty-state">No news articles found. Add one above.</td></tr>';
+                    return;
+                }
+
+                // Render News Table
+                news.forEach((item) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+            <td>
+              <div class="cell-img-wrapper">
+                <img src="${item.image_url}" alt="Img" class="cell-img">
+              </div>
+            </td>
+            <td>
+              <div class="cell-title">${item.title}</div>
+              <div class="cell-date">${item.date}</div>
+            </td>
+            <td>
+              <span class="badge-tag">${item.tag}</span>
+            </td>
+            <td>
+              <div class="action-btns">
+                <button class="btn-action edit" data-id="${item.id}"><svg style="width:16px;height:16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>
+                <button class="btn-action delete" data-id="${item.id}"><svg style="width:16px;height:16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></button>
+              </div>
+            </td>
+          `;
+                    newsTableBody.appendChild(tr);
+                });
+
+                // Set action listeners for edit/delete news
+                newsTableBody.querySelectorAll('.btn-action.edit').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const id = btn.getAttribute('data-id');
+                        const item = news.find(n => n.id.toString() === id);
+                        if (item) {
+                            newsTitle.value = item.title;
+                            newsDesc.value = item.desc;
+                            newsDate.value = item.date;
+                            newsTag.value = item.tag;
+                            newsImageUrl.value = item.image_url;
+                            newsEditId.value = item.id;
+                            newsFormTitle.innerText = "Edit News Article";
+
+                            document.getElementById('panel-news').scrollIntoView({ behavior: 'smooth' });
+                        }
+                    });
+                });
+
+                newsTableBody.querySelectorAll('.btn-action.delete').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        const id = btn.getAttribute('data-id');
+                        const item = news.find(n => n.id.toString() === id);
+
+                        const { error } = await supabaseClient
+                            .from('news')
+                            .delete()
+                            .eq('id', id);
+
+                        if (error) {
+                            console.error("Error deleting article:", error);
+                            showToast("Failed to delete article", false);
+                            return;
+                        }
+
+                        showToast(`Article "${item.title}" deleted!`);
+                        await loadNews();
+                    });
+                });
+            };
+
+            // Form submission news
+            newsForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const title = newsTitle.value.trim();
+                const desc = newsDesc.value.trim();
+                const date = newsDate.value;
+                const tag = newsTag.value;
+                const imgUrl = newsImageUrl.value.trim();
+                const editId = newsEditId.value;
+
+                btnSaveNews.disabled = true;
+
+                if (editId === '') {
+                    // Add news to Supabase
+                    // Set sort_order to current max + 1
+                    const maxSort = news.length > 0 ? Math.max(...news.map(n => n.sort_order)) : 0;
+
+                    const newsData = {
+                        title: title,
+                        desc: desc,
+                        date: date,
+                        tag: tag,
+                        image_url: imgUrl,
+                        is_featured: false,
+                        sort_order: maxSort + 1
+                    };
+
+                    const { error } = await supabaseClient
+                        .from('news')
+                        .insert([newsData]);
+
+                    if (error) {
+                        console.error("Error creating news article:", error);
+                        showToast("Failed to create article", false);
+                        btnSaveNews.disabled = false;
+                        return;
+                    }
+                    showToast("News article uploaded successfully!");
+                } else {
+                    // Edit news in Supabase
+                    const newsData = {
+                        title: title,
+                        desc: desc,
+                        date: date,
+                        tag: tag,
+                        image_url: imgUrl
+                    };
+
+                    const { error } = await supabaseClient
+                        .from('news')
+                        .update(newsData)
+                        .eq('id', editId);
+
+                    if (error) {
+                        console.error("Error updating article:", error);
+                        showToast("Failed to update article", false);
+                        btnSaveNews.disabled = false;
+                        return;
+                    }
+                    showToast("News article updated successfully!");
+                }
+
+                newsForm.reset();
+                newsEditId.value = '';
+                newsFormTitle.innerText = "Enter News Data";
+                btnSaveNews.disabled = false;
+                await loadNews();
+            });
+
+            document.getElementById('btn-reset-news').addEventListener('click', () => {
+                newsForm.reset();
+                newsEditId.value = '';
+                newsFormTitle.innerText = "Enter News Data";
+            });
+
+            // ==========================================================================
+            // 7. ACHIEVEMENTS CONTROLLER (READ/WRITE SUPABASE)
+            // ==========================================================================
+            const achievementForm = document.getElementById('achievement-form');
+            const achTitle = document.getElementById('achievement-title');
+            const achPos = document.getElementById('achievement-pos');
+            const achDesc = document.getElementById('achievement-desc');
+            const achEditId = document.getElementById('achievement-edit-id');
+            const achFormTitle = document.getElementById('achievement-form-title');
+            const achievementsTableBody = document.getElementById('achievements-table-body');
+
+            const loadAchievements = async () => {
+                const { data, error } = await supabaseClient
+                    .from('achievements')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) {
+                    console.error("Error loading achievements:", error);
+                    showToast("Failed to load achievements", false);
+                    return;
+                }
+
+                achievements = data || [];
+                renderAchievements();
+            };
+
+            const renderAchievements = () => {
+                achievementsTableBody.innerHTML = '';
+
+                if (achievements.length === 0) {
+                    achievementsTableBody.innerHTML = '<tr><td colspan="4" class="empty-state">No achievements recorded yet.</td></tr>';
+                    return;
+                }
+
+                achievements.forEach(item => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+            <td>
+              <div class="cell-img-wrapper" style="aspect-ratio: 16/10;">
+                <img src="${item.image_url}" alt="Img" class="cell-img">
+              </div>
+            </td>
+            <td>
+              <div class="cell-title">${item.title}</div>
+              <div class="cell-date">${item.desc.substring(0, 50)}...</div>
+            </td>
+            <td>
+              <span class="badge-tag">${item.pos}</span>
+            </td>
+            <td>
+              <div class="action-btns">
+                <button class="btn-action edit" data-id="${item.id}"><svg style="width:16px;height:16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>
+                <button class="btn-action delete" data-id="${item.id}"><svg style="width:16px;height:16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></button>
+              </div>
+            </td>
+          `;
+                    achievementsTableBody.appendChild(tr);
+                });
+
+                // Set action listeners
+                achievementsTableBody.querySelectorAll('.btn-action.edit').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const id = btn.getAttribute('data-id');
+                        const item = achievements.find(a => a.id.toString() === id);
+                        if (item) {
+                            achTitle.value = item.title;
+                            achPos.value = item.pos;
+                            achDesc.value = item.desc;
+                            achImageUrl.value = item.image_url;
+                            achEditId.value = item.id;
+                            achFormTitle.innerText = "Edit Achievement";
+
+                            document.getElementById('panel-achievements').scrollIntoView({ behavior: 'smooth' });
+                        }
+                    });
+                });
+
+                achievementsTableBody.querySelectorAll('.btn-action.delete').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        const id = btn.getAttribute('data-id');
+                        const item = achievements.find(a => a.id.toString() === id);
+
+                        const { error } = await supabaseClient
+                            .from('achievements')
+                            .delete()
+                            .eq('id', id);
+
+                        if (error) {
+                            console.error("Error deleting achievement:", error);
+                            showToast("Failed to delete achievement", false);
+                            return;
+                        }
+
+                        showToast(`Achievement "${item.title}" deleted!`);
+                        await loadAchievements();
+                    });
+                });
+            };
+
+            // Form submission achievements
+            achievementForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const title = achTitle.value.trim();
+                const pos = achPos.value.trim();
+                const desc = achDesc.value.trim();
+                const imgUrl = achImageUrl.value.trim();
+                const editId = achEditId.value;
+
+                btnSaveAchievement.disabled = true;
+
+                if (editId === '') {
+                    // Add achievement to Supabase
+                    const achData = {
+                        title: title,
+                        pos: pos,
+                        desc: desc,
+                        image_url: imgUrl
+                    };
+
+                    const { error } = await supabaseClient
+                        .from('achievements')
+                        .insert([achData]);
+
+                    if (error) {
+                        console.error("Error saving achievement:", error);
+                        showToast("Failed to add achievement", false);
+                        btnSaveAchievement.disabled = false;
+                        return;
+                    }
+                    showToast("Achievement recorded successfully!");
+                } else {
+                    // Edit achievement in Supabase
+                    const achData = {
+                        title: title,
+                        pos: pos,
+                        desc: desc,
+                        image_url: imgUrl
+                    };
+
+                    const { error } = await supabaseClient
+                        .from('achievements')
+                        .update(achData)
+                        .eq('id', editId);
+
+                    if (error) {
+                        console.error("Error updating achievement:", error);
+                        showToast("Failed to update achievement", false);
+                        btnSaveAchievement.disabled = false;
+                        return;
+                    }
+                    showToast("Achievement details updated!");
+                }
+
+                achievementForm.reset();
+                achEditId.value = '';
+                achFormTitle.innerText = "Enter Achievement Details";
+                btnSaveAchievement.disabled = false;
+                await loadAchievements();
+            });
+
+            document.getElementById('btn-reset-achievement').addEventListener('click', () => {
+                achievementForm.reset();
+                achEditId.value = '';
+                achFormTitle.innerText = "Enter Achievement Details";
+            });
+
+            // ==========================================================================
+            // COMMITTEE CONTROLLER (READ/WRITE SUPABASE)
+            // ==========================================================================
+            const committeeForm = document.getElementById('committee-form');
+            const commName = document.getElementById('committee-name');
+            const commPosition = document.getElementById('committee-position');
+            const commPlace = document.getElementById('committee-place');
+            const commEditId = document.getElementById('committee-edit-id');
+            const commFormTitle = document.getElementById('committee-form-title');
+            const committeeTableBody = document.getElementById('committee-table-body');
+
+            const loadCommittee = async () => {
+                const { data, error } = await supabaseClient
+                    .from('committee')
+                    .select('*')
+                    .order('created_at', { ascending: true });
+
+                if (error) {
+                    console.error("Error loading committee:", error);
+                    showToast("Failed to load committee members", false);
+                    return;
+                }
+
+                committee = data || [];
+                renderCommittee();
+            };
+
+            const renderCommittee = () => {
+                committeeTableBody.innerHTML = '';
+
+                if (committee.length === 0) {
+                    committeeTableBody.innerHTML = '<tr><td colspan="4" class="empty-state">No committee members recorded yet.</td></tr>';
+                    return;
+                }
+
+                committee.forEach(item => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+            <td>
+              <div class="cell-img-wrapper" style="aspect-ratio: 1/1;">
+                <img src="${item.image_url}" alt="Img" class="cell-img" onerror="this.src='files/member1.png';">
+              </div>
+            </td>
+            <td>
+              <div class="cell-title">${item.name}</div>
+            </td>
+            <td>
+              <span class="badge-tag">${item.position}</span>
+              <div class="cell-date">${item.place}</div>
+            </td>
+            <td>
+              <div class="action-btns">
+                <button class="btn-action edit" data-id="${item.id}"><svg style="width:16px;height:16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>
+                <button class="btn-action delete" data-id="${item.id}"><svg style="width:16px;height:16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></button>
+              </div>
+            </td>
+          `;
+                    committeeTableBody.appendChild(tr);
+                });
+
+                // Set action listeners
+                committeeTableBody.querySelectorAll('.btn-action.edit').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const id = btn.getAttribute('data-id');
+                        const item = committee.find(c => c.id.toString() === id);
+                        if (item) {
+                            commName.value = item.name;
+                            commPosition.value = item.position;
+                            commPlace.value = item.place;
+                            commImageUrl.value = item.image_url;
+                            commEditId.value = item.id;
+                            commFormTitle.innerText = "Edit Committee Member";
+
+                            document.getElementById('panel-committee').scrollIntoView({ behavior: 'smooth' });
+                        }
+                    });
+                });
+
+                committeeTableBody.querySelectorAll('.btn-action.delete').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        const id = btn.getAttribute('data-id');
+                        const item = committee.find(c => c.id.toString() === id);
+
+                        if (!confirm(`Are you sure you want to delete ${item.name}?`)) return;
+
+                        const { error } = await supabaseClient
+                            .from('committee')
+                            .delete()
+                            .eq('id', id);
+
+                        if (error) {
+                            console.error("Error deleting committee member:", error);
+                            showToast("Failed to delete committee member", false);
+                            return;
+                        }
+
+                        showToast(`Member "${item.name}" deleted!`);
+                        await loadCommittee();
+                    });
+                });
+            };
+
+            // Form submission committee
+            committeeForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const name = commName.value.trim();
+                const position = commPosition.value.trim();
+                const place = commPlace.value.trim();
+                const imgUrl = commImageUrl.value.trim();
+                const editId = commEditId.value;
+
+                btnSaveCommittee.disabled = true;
+
+                if (editId === '') {
+                    // Add member to Supabase
+                    const memberData = {
+                        name: name,
+                        position: position,
+                        place: place,
+                        image_url: imgUrl
+                    };
+
+                    const { error } = await supabaseClient
+                        .from('committee')
+                        .insert([memberData]);
+
+                    if (error) {
+                        console.error("Error saving committee member:", error);
+                        showToast("Failed to add committee member", false);
+                        btnSaveCommittee.disabled = false;
+                        return;
+                    }
+                    showToast("Committee member added successfully!");
+                } else {
+                    // Edit member in Supabase
+                    const memberData = {
+                        name: name,
+                        position: position,
+                        place: place,
+                        image_url: imgUrl
+                    };
+
+                    const { error } = await supabaseClient
+                        .from('committee')
+                        .update(memberData)
+                        .eq('id', editId);
+
+                    if (error) {
+                        console.error("Error updating committee member:", error);
+                        showToast("Failed to update committee member", false);
+                        btnSaveCommittee.disabled = false;
+                        return;
+                    }
+                    showToast("Committee member updated successfully!");
+                }
+
+                committeeForm.reset();
+                commEditId.value = '';
+                commFormTitle.innerText = "Enter Committee Member Data";
+                btnSaveCommittee.disabled = false;
+                await loadCommittee();
+            });
+
+            document.getElementById('btn-reset-committee').addEventListener('click', () => {
+                committeeForm.reset();
+                commEditId.value = '';
+                commFormTitle.innerText = "Enter Committee Member Data";
+            });
+
+            // ==========================================================================
+            // 8. DATABASE AUTO-INITIALIZE SEEDER
+            // ==========================================================================
+            const initAndSeedDatabase = async () => {
+                await loadTags();
+                await loadNews();
+                await loadAchievements();
+                await loadCommittee();
+
+                // Seed default tags if Supabase has zero tags
+                if (tags.length === 0) {
+                    showToast("Seeding initial tags category...", true);
+                    const initialTags = ["Qatar Hadia", "Bookplus", "Achievements", "General"];
+                    const { error } = await supabaseClient
+                        .from('tags')
+                        .insert(initialTags.map(name => ({ name: name })));
+
+                    if (!error) {
+                        await loadTags();
+                    }
+                }
+            };
+
+            // Run App Initialization
+            initAndSeedDatabase();
+        });
+    </script>
+</body>
+
+</html>

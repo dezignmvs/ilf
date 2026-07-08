@@ -19,7 +19,7 @@
   <header id="header">
     <div class="header-container">
       <a href="#home" class="logo">
-        <img src="files/logo.png" alt="ILFA Logo" class="logo-img" id="logo-img">
+        <img src="files/logo-black.png" alt="ILFA Logo" class="logo-img" id="logo-img">
       </a>
 
       <!-- Navigation Links -->
@@ -33,13 +33,13 @@
             </ul>
           </li>
           <li><a href="#news-events" class="nav-link">News&Events</a></li>
-          <li><a href="#achievements" class="nav-link">Achievements</a></li>
+          <li><a href="achievement.html" class="nav-link">Achievements</a></li>
         </ul>
       </nav>
 
       <!-- Grid Icon / Menu Indicator -->
       <div class="header-right" id="mobile-toggle" aria-expanded="false" aria-controls="nav-menu">
-        <img src="files/5rec.png" alt="Menu" class="grid-icon" id="toggle-icon">
+        <img src="files/5rec-bw.png" alt="Menu" class="grid-icon" id="toggle-icon">
       </div>
     </div>
   </header>
@@ -83,34 +83,221 @@
       </div>
     </section>
 
-    <!-- Programs / Achievements Section -->
-    <section class="programs-section" id="news-events">
-      <div class="container programs-grid">
-        <!-- Left Side: Wide Card + Info Text & Button -->
-        <div class="programs-left">
-          <div class="black-card card-wide"></div>
-          <div class="programs-info">
-            <p class="programs-desc">Explore our diverse and innovative Programs &mdash; each a unique blend of creativity, expertise, and a commitment to excellence.</p>
-            <a href="#achievements" class="btn btn-cyan">View More &rarr;</a>
+    <!-- News & Events Section -->
+    <section class="news-events-section" id="news-events">
+      <div class="container news-events-grid">
+        <!-- Left Side: Sticky Info & Controls -->
+        <div class="news-events-left">
+          <div>
+            <h2 class="news-events-title">News & Events</h2>
+            <p class="news-events-desc">Stay informed about the impactful initiatives, achievements, and events that reflect Hadia's commitment to education, unity, and community development.</p>
+          </div>
+          <div class="news-events-controls-row">
+            <a href="news.html" class="btn btn-more-news">More News</a>
+            <div class="slider-nav">
+              <button class="slider-btn prev" id="news-prev" aria-label="Previous Slide">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+              </button>
+              <span class="slider-divider"></span>
+              <button class="slider-btn next" id="news-next" aria-label="Next Slide">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </button>
+            </div>
           </div>
         </div>
         
-        <!-- Middle Side: Tall Card -->
-        <div class="programs-middle">
-          <div class="black-card card-tall"></div>
-        </div>
-        
-        <!-- Right Side: Three Stacked Cards -->
-        <div class="programs-right">
-          <div class="black-card card-stacked"></div>
-          <div class="black-card card-stacked"></div>
-          <div class="black-card card-stacked"></div>
+        <!-- Right Side: News Carousel -->
+        <div class="news-events-right">
+          <div class="news-carousel" id="news-carousel">
+            
+            <!-- Card 1 -->
+            <div class="news-card">
+              <div class="news-card-image-wrapper">
+                <img src="files/news_seminar.png" alt="Anniversary Event" class="news-card-img">
+              </div>
+              <div class="news-card-content">
+                <p class="news-card-desc">Stay informed about the impactful initiatives, achievements and events that reflect Hadia's commitment to education, unity and community development.</p>
+                <a href="news-detail.html?id=episteme" class="news-card-btn">Read More</a>
+              </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="news-card">
+              <div class="news-card-image-wrapper">
+                <img src="files/logo.png" alt="Academic Seminar" class="news-card-img">
+              </div>
+              <div class="news-card-content">
+                <p class="news-card-desc">Academic Seminar: Culminating in deep debates and expert-led discussions on contemporary educational reforms and societal progress.</p>
+                <a href="news-detail.html?id=edukening" class="news-card-btn">Read More</a>
+              </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="news-card">
+              <div class="news-card-image-wrapper">
+                <img src="files/news_community.png" alt="Community Service" class="news-card-img">
+              </div>
+              <div class="news-card-content">
+                <p class="news-card-desc">Community Service Day: Promoting sustainable environments and fostering social unity through student-led local cleanup and tree-planting initiatives.</p>
+                <a href="news-detail.html?id=kashmir-parvaz" class="news-card-btn">Read More</a>
+              </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="news-card">
+              <div class="news-card-image-wrapper">
+                <img src="files/member1.png" alt="Sports Meet" class="news-card-img">
+              </div>
+              <div class="news-card-content">
+                <p class="news-card-desc">Annual Sports Meet: Showcasing athletic prowess, teamwork, and healthy competition among students across various sport disciplines.</p>
+                <a href="news-detail.html?id=mahmood-hudawi" class="news-card-btn">Read More</a>
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
     </section>
 
   </main>
 
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <!-- Logo Column -->
+      <div class="footer-logo-col">
+        <img src="files/logo.png" alt="ILFA Logo" class="footer-logo">
+      </div>
+      
+      <!-- About Column -->
+      <div class="footer-col">
+        <h3>About</h3>
+        <p>ILFA Students' Union of the 10th Batch at Sheikh Fareed Auliya Da'wa College, Odamala, is a student representative body established to promote unity, leadership, and positive change within our community.</p>
+      </div>
+      
+      <!-- Quick Links Column -->
+      <div class="footer-col">
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="committee.html">Committee</a></li>
+          <li><a href="#news-events">News & Events</a></li>
+        </ul>
+      </div>
+      
+      <!-- External Links Column -->
+      <div class="footer-col">
+        <h3>External Links</h3>
+        <ul class="footer-links">
+          <li><a href="https://dhiu.in/" target="_blank" rel="noopener">Darul Huda</a></li>
+          <li><a href="https://hadia.in/" target="_blank" rel="noopener">Hadia</a></li>
+          <li><a href="http://cse.hadia.in/" target="_blank" rel="noopener">CSE</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- Footer Bottom Copyright -->
+    <div class="footer-bottom">
+      <p class="footer-copyright">&copy; 2026 ILFA is the official website of ILFA 10th Batch Union</p>
+    </div>
+  </footer>
+
+  <!-- Supabase Integration -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const supabaseUrl = 'https://brgjroxykxdruyazhqmy.supabase.co';
+      const supabaseKey = 'sb_publishable_MfzuFBf0TaFfJh38ZOBw6w_GBw8AZ3q';
+      const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+      
+      const carousel = document.getElementById('news-carousel');
+      if (!carousel) return;
+
+      try {
+        // 1. Fetch homepage settings
+        const { data: settingsData, error: settingsError } = await supabaseClient
+          .from('settings')
+          .select('*')
+          .eq('key', 'homepage_news_settings')
+          .maybeSingle();
+
+        let displayNews = [];
+
+        if (!settingsError && settingsData && settingsData.value) {
+          const config = settingsData.value;
+          const count = config.count || 4;
+          const selectedIds = (config.selected_ids || []).filter(id => id && id !== '');
+
+          if (selectedIds.length > 0) {
+            // Fetch selected news articles
+            const { data: newsData, error: newsError } = await supabaseClient
+              .from('news')
+              .select('*')
+              .in('id', selectedIds);
+
+            if (!newsError && newsData && newsData.length > 0) {
+              // Order them as per selectedIds
+              const newsMap = {};
+              newsData.forEach(item => {
+                newsMap[item.id.toString()] = item;
+              });
+              
+              selectedIds.forEach(id => {
+                const item = newsMap[id.toString()];
+                if (item) {
+                  displayNews.push(item);
+                }
+              });
+              
+              // Slice to count
+              displayNews = displayNews.slice(0, count);
+            }
+          }
+        }
+
+        // 2. Fallback to latest news if settings not found/empty
+        if (displayNews.length === 0) {
+          const { data: latestNews, error: latestError } = await supabaseClient
+            .from('news')
+            .select('*')
+            .order('date', { ascending: false })
+            .limit(4);
+
+          if (!latestError && latestNews && latestNews.length > 0) {
+            displayNews = latestNews;
+          }
+        }
+
+        // 3. Render news cards
+        if (displayNews.length > 0) {
+          carousel.innerHTML = '';
+          displayNews.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'news-card';
+            card.innerHTML = `
+              <div class="news-card-image-wrapper">
+                <img src="${item.image_url}" alt="${item.title}" class="news-card-img">
+              </div>
+              <div class="news-card-content">
+                <h3 style="font-family: var(--font-heading); font-size: 1.1rem; font-weight: 700; margin: 0 0 10px 0; color: #fff; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4;">${item.title}</h3>
+                <p class="news-card-desc" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">${item.desc}</p>
+                <a href="news-detail.html?id=${item.id}" class="news-card-btn">Read More</a>
+              </div>
+            `;
+            carousel.appendChild(card);
+          });
+          
+          // Re-trigger button state check in script.js after rendering
+          setTimeout(() => {
+            window.dispatchEvent(new Event('resize'));
+          }, 100);
+        }
+      } catch (err) {
+        console.error("Error loading homepage news:", err);
+      }
+    });
+  </script>
 </body>
 </html>

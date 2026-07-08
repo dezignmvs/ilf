@@ -7,6 +7,8 @@
   <meta name="description" content="Committee members of ILFA - 10th Batch Union, Sheikh Fareed Auliya Da'wa College, Odamala.">
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="stylesheet" href="styles.css">
+  <!-- Supabase CDN Client Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -19,7 +21,7 @@
   <header id="header">
     <div class="header-container">
       <a href="index.html#home" class="logo">
-        <img src="files/logo.png" alt="ILFA Logo" class="logo-img" id="logo-img">
+        <img src="files/logo-black.png" alt="ILFA Logo" class="logo-img" id="logo-img">
       </a>
 
       <!-- Navigation Links -->
@@ -32,14 +34,14 @@
               <li><a href="committee.html" class="dropdown-item active">Committee</a></li>
             </ul>
           </li>
-          <li><a href="index.html#news-events" class="nav-link">News&Events</a></li>
-          <li><a href="index.html#achievements" class="nav-link">Achievements</a></li>
+          <li><a href="news.html" class="nav-link">News&Events</a></li>
+          <li><a href="achievement.html" class="nav-link">Achievements</a></li>
         </ul>
       </nav>
 
       <!-- Grid Icon / Menu Indicator -->
       <div class="header-right" id="mobile-toggle" aria-expanded="false" aria-controls="nav-menu">
-        <img src="files/5rec.png" alt="Menu" class="grid-icon" id="toggle-icon">
+        <img src="files/5rec-bw.png" alt="Menu" class="grid-icon" id="toggle-icon">
       </div>
     </div>
   </header>
@@ -48,60 +50,124 @@
   <main>
     <section class="committee-hero">
       <div class="container text-center">
-        <span class="about-eyebrow">About</span>
+        <span class="about-eyebrow">Leadership</span>
         <h1 class="committee-title">Our Executive Committee</h1>
         <div class="about-divider"></div>
-        <p class="committee-subtitle">The dedicated team leading the 10th Batch Union towards positive community action and academic excellence.</p>
+        <p class="committee-subtitle">The dedicated team leading the 10th Batch Union towards positive community action, creative synergy, and academic excellence.</p>
       </div>
     </section>
 
     <section class="committee-section">
-      <div class="container committee-grid">
-        <!-- Member 1 -->
-        <div class="member-card">
-          <div class="member-image-wrapper">
-            <img src="files/member1.png" alt="Hisam" class="member-img">
-          </div>
-          <div class="member-info">
-            <h3 class="member-name">Hisam</h3>
-            <div class="member-meta-row">
-              <span class="member-role">President</span>
-              <span class="member-place">Palolopparamb</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Member 2 -->
-        <div class="member-card">
-          <div class="member-image-wrapper">
-            <img src="files/member2.png" alt="Arshad" class="member-img">
-          </div>
-          <div class="member-info">
-            <h3 class="member-name">Arshad</h3>
-            <div class="member-meta-row">
-              <span class="member-role">Secretary</span>
-              <span class="member-place">Kottopadam</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Member 3 -->
-        <div class="member-card">
-          <div class="member-image-wrapper">
-            <img src="files/member3.png" alt="Afsal" class="member-img">
-          </div>
-          <div class="member-info">
-            <h3 class="member-name">Afsal</h3>
-            <div class="member-meta-row">
-              <span class="member-role">Treasurer</span>
-              <span class="member-place">Arakkuparamb</span>
-            </div>
+      <div class="container">
+        <div class="committee-grid" id="committee-grid">
+          <!-- Loaded dynamically from Supabase -->
+          <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-secondary); font-family: var(--font-sans);">
+            Loading Committee Members...
           </div>
         </div>
       </div>
     </section>
   </main>
 
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <!-- Logo Column -->
+      <div class="footer-logo-col">
+        <img src="files/logo.png" alt="ILFA Logo" class="footer-logo">
+      </div>
+      
+      <!-- About Column -->
+      <div class="footer-col">
+        <h3>About</h3>
+        <p>ILFA Students' Union of the 10th Batch at Sheikh Fareed Auliya Da'wa College, Odamala, is a student representative body established to promote unity, leadership, and positive change within our community.</p>
+      </div>
+      
+      <!-- Quick Links Column -->
+      <div class="footer-col">
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="index.html#home">Home</a></li>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="committee.html">Committee</a></li>
+          <li><a href="index.html#news-events">News & Events</a></li>
+        </ul>
+      </div>
+      
+      <!-- External Links Column -->
+      <div class="footer-col">
+        <h3>External Links</h3>
+        <ul class="footer-links">
+          <li><a href="https://dhiu.in/" target="_blank" rel="noopener">Darul Huda</a></li>
+          <li><a href="https://hadia.in/" target="_blank" rel="noopener">Hadia</a></li>
+          <li><a href="http://cse.hadia.in/" target="_blank" rel="noopener">CSE</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- Footer Bottom Copyright -->
+    <div class="footer-bottom">
+      <p class="footer-copyright">&copy; 2026 ILFA is the official website of ILFA 10th Batch Union</p>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const supabaseUrl = 'https://brgjroxykxdruyazhqmy.supabase.co';
+      const supabaseKey = 'sb_publishable_MfzuFBf0TaFfJh38ZOBw6w_GBw8AZ3q';
+      const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+      const grid = document.getElementById('committee-grid');
+
+      try {
+        const { data, error } = await supabaseClient
+          .from('committee')
+          .select('*')
+          .order('created_at', { ascending: true });
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+          grid.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-secondary); font-family: var(--font-sans);">
+              No committee members found.
+            </div>`;
+          return;
+        }
+
+        grid.innerHTML = '';
+        data.forEach((item, index) => {
+          const card = document.createElement('div');
+          card.className = 'member-card';
+          card.style.setProperty('--delay', index + 1);
+          
+          card.innerHTML = `
+            <div class="member-image-wrapper">
+              <img src="${item.image_url}" alt="${item.name}" class="member-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+              <div class="member-avatar-fallback" style="display: none;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+            </div>
+            <div class="member-info">
+              <span class="member-role">${item.position}</span>
+              <h3 class="member-name">${item.name}</h3>
+              <span class="member-place">${item.place}</span>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      } catch (err) {
+        console.error("Error loading committee:", err);
+        grid.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #ef4444; font-family: var(--font-sans); font-weight: 500;">
+            Failed to load committee members.
+          </div>`;
+      }
+    });
+  </script>
   <script src="script.js"></script>
 </body>
 </html>
