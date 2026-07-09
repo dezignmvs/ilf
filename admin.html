@@ -194,6 +194,12 @@
             align-items: start;
         }
 
+        .stacked-forms-lists {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
         /* Card Panels */
         .admin-card {
             background-color: var(--admin-card-bg);
@@ -604,7 +610,39 @@
 
 <body class="admin-body">
 
-    <div class="admin-layout">
+    <!-- Password Protection Modal -->
+    <div id="password-modal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: radial-gradient(circle at top right, rgba(30,110,226,0.12), transparent 40%), #fafafa; display: flex; align-items: center; justify-content: center; z-index: 99999;">
+        <div style="background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); padding: 40px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.06); width: 100%; max-width: 420px; text-align: center; box-sizing: border-box;">
+            <!-- Brand Logo -->
+            <div style="margin-bottom: 24px;">
+                <img src="files/logo-black.png" alt="Logo" style="height: 48px; width: auto; margin-bottom: 12px;">
+                <h2 style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700; color: #111; margin: 0;">Portal Authentication</h2>
+                <p style="font-size: 0.9rem; color: #666; margin: 8px 0 0 0;">Please enter the secure admin credentials.</p>
+            </div>
+            
+            <!-- Password Form -->
+            <form id="password-form" style="display: flex; flex-direction: column; gap: 16px;">
+                <div style="text-align: left;">
+                    <label for="admin-password-input" style="font-size: 0.8rem; font-weight: 600; color: #444; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 8px;">Password</label>
+                    <input type="password" id="admin-password-input" placeholder="••••••••" style="width: 100%; padding: 14px 16px; border: 1px solid #eaeaea; border-radius: 12px; font-size: 1rem; box-sizing: border-box; background: #ffffff; color: #111; transition: border-color 0.2s;" required>
+                </div>
+                
+                <div id="password-error" style="color: #ea4335; font-size: 0.85rem; font-weight: 500; display: none; text-align: left; margin-top: -4px;">
+                    Incorrect password. Please try again.
+                </div>
+                
+                <button type="submit" style="width: 100%; background-color: var(--brand-blue); color: white; border: none; padding: 14px; border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(30,110,226,0.2);">
+                    Unlock Dashboard
+                </button>
+            </form>
+            
+            <a href="index.html" style="display: inline-block; margin-top: 20px; font-size: 0.85rem; color: #666; text-decoration: none; font-weight: 500; transition: color 0.2s;">
+                ← Back to Live Site
+            </a>
+        </div>
+    </div>
+
+    <div class="admin-layout" id="admin-layout" style="display: none;">
         <!-- Sidebar Navigation -->
         <aside class="admin-sidebar">
             <a href="index.html" class="admin-logo">
@@ -893,7 +931,7 @@
                     </div>
                 </div>
 
-                <div class="grid-forms-lists">
+                <div class="stacked-forms-lists">
                     <!-- Left: Form -->
                     <div class="admin-card">
                         <h2 class="admin-card-title" id="achievement-form-title">Enter Achievement Details</h2>
@@ -917,6 +955,11 @@
                                 <textarea id="achievement-desc" class="form-control"
                                     placeholder="Describe the achievement milestones, team details, or context"
                                     required></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="achievement-date" class="form-label">Achievement Date</label>
+                                <input type="date" id="achievement-date" class="form-control" required>
                             </div>
 
                             <div class="form-group">
@@ -1064,7 +1107,49 @@
 
     <!-- Dashboard Script Logic -->
     <script>
+        // Password validation logic
+        const initSecurity = () => {
+            const passwordForm = document.getElementById('password-form');
+            const passwordInput = document.getElementById('admin-password-input');
+            const passwordError = document.getElementById('password-error');
+            const passwordModal = document.getElementById('password-modal');
+            const adminLayout = document.getElementById('admin-layout');
+
+            if (!passwordForm) return;
+
+            // Check session storage
+            if (sessionStorage.getItem('admin_authenticated') === 'true') {
+                passwordModal.style.display = 'none';
+                adminLayout.style.display = 'grid';
+                return;
+            }
+
+            passwordForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const pwd = passwordInput.value;
+
+                if (pwd === '81119') {
+                    sessionStorage.setItem('admin_authenticated', 'true');
+                    
+                    passwordModal.style.transition = 'opacity 0.3s ease';
+                    passwordModal.style.opacity = '0';
+                    setTimeout(() => {
+                        passwordModal.style.display = 'none';
+                        adminLayout.style.display = 'grid';
+                    }, 300);
+                } else {
+                    passwordError.style.display = 'block';
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                }
+            });
+
+            // Focus field
+            passwordInput.focus();
+        };
+
         document.addEventListener('DOMContentLoaded', () => {
+            initSecurity();
 
             // ==========================================================================
             // 1. DATABASE CONFIGURATION (SUPABASE + CLOUDINARY)
@@ -1812,6 +1897,7 @@
             const achTitle = document.getElementById('achievement-title');
             const achPos = document.getElementById('achievement-pos');
             const achDesc = document.getElementById('achievement-desc');
+            const achDate = document.getElementById('achievement-date');
             const achEditId = document.getElementById('achievement-edit-id');
             const achFormTitle = document.getElementById('achievement-form-title');
             const achievementsTableBody = document.getElementById('achievements-table-body');
@@ -1820,6 +1906,7 @@
                 const { data, error } = await supabaseClient
                     .from('achievements')
                     .select('*')
+                    .order('date', { ascending: false, nullsFirst: false })
                     .order('created_at', { ascending: false });
 
                 if (error) {
@@ -1850,7 +1937,7 @@
             </td>
             <td>
               <div class="cell-title">${item.title}</div>
-              <div class="cell-date">${item.desc.substring(0, 50)}...</div>
+              <div class="cell-date">${item.date ? item.date + ' | ' : ''}${item.desc.substring(0, 50)}...</div>
             </td>
             <td>
               <span class="badge-tag">${item.pos}</span>
@@ -1874,6 +1961,7 @@
                             achTitle.value = item.title;
                             achPos.value = item.pos;
                             achDesc.value = item.desc;
+                            achDate.value = item.date || '';
                             achImageUrl.value = item.image_url;
                             achEditId.value = item.id;
                             achFormTitle.innerText = "Edit Achievement";
@@ -1912,6 +2000,7 @@
                 const title = achTitle.value.trim();
                 const pos = achPos.value.trim();
                 const desc = achDesc.value.trim();
+                const date = achDate.value;
                 const imgUrl = achImageUrl.value.trim();
                 const editId = achEditId.value;
 
@@ -1923,7 +2012,8 @@
                         title: title,
                         pos: pos,
                         desc: desc,
-                        image_url: imgUrl
+                        image_url: imgUrl,
+                        date: date
                     };
 
                     const { error } = await supabaseClient
@@ -1943,7 +2033,8 @@
                         title: title,
                         pos: pos,
                         desc: desc,
-                        image_url: imgUrl
+                        image_url: imgUrl,
+                        date: date
                     };
 
                     const { error } = await supabaseClient

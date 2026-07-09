@@ -30,7 +30,8 @@ create table achievements (
   title text not null,
   pos text not null, -- Position or Qualification
   "desc" text not null,
-  image_url text not null
+  image_url text not null,
+  date date
 );
 
 -- 4. Enable Row Level Security (RLS)
@@ -101,6 +102,9 @@ create table committee (
 
 -- NOTE: If your committee table is already created in Supabase, run this SQL query to update the schema:
 -- ALTER TABLE committee ADD COLUMN sort_order integer DEFAULT 0 NOT NULL;
+
+-- NOTE: If your achievements table is already created in Supabase, run this SQL query to update the schema:
+-- ALTER TABLE achievements ADD COLUMN date date;
 
 -- Enable Row Level Security (RLS)
 alter table committee enable row level security;
