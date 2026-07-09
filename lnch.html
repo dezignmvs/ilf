@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inauguration - ILFA 10th Batch Union</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="lnch.css">
+    <!-- canvas-confetti library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+
+<body class="launch-body">
+    <!-- Decorative background elements -->
+    <div class="bg-grid"></div>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <div class="launch-container">
+        <div class="launch-header">
+            <span class="launch-eyebrow">ILFA 10th Batch Union</span>
+            <h1 class="launch-title">Official Website Launch</h1>
+            <p class="launch-subtitle">Click the button below to inaugurate the official union portal.</p>
+        </div>
+
+        <div style="margin: 60px 0;">
+            <button class="launch-btn" id="launch-button">
+                Inaugurate Portal
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const button = document.getElementById('launch-button');
+            let launched = false;
+
+            const launchPortal = () => {
+                if (launched) return;
+                launched = true;
+
+                button.disabled = true;
+
+                // Trigger confetti immediately
+                triggerConfetti();
+
+                // Fade out and redirect
+                setTimeout(() => {
+                    document.body.style.transition = 'opacity 0.8s ease';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        window.location.href = 'index.html?inaugurated=true';
+                    }, 800);
+                }, 2000);
+            };
+
+            const triggerConfetti = () => {
+                const duration = 2 * 1000;
+                const animationEnd = Date.now() + duration;
+                const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1000 };
+
+                const randomInRange = (min, max) => Math.random() * (max - min) + min;
+
+                const interval = setInterval(function () {
+                    const timeLeft = animationEnd - Date.now();
+
+                    if (timeLeft <= 0) {
+                        return clearInterval(interval);
+                    }
+
+                    const particleCount = 50 * (timeLeft / duration);
+                    confetti(Object.assign({}, defaults, { particleCount, origin: { x: 0.5, y: 0.5 } }));
+                    confetti(Object.assign({}, defaults, { particleCount: 15, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                    confetti(Object.assign({}, defaults, { particleCount: 15, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+                }, 250);
+            };
+
+            button.addEventListener('click', launchPortal);
+        });
+    </script>
+</body>
+
+</html>

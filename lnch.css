@@ -1,0 +1,118 @@
+/* ==========================================================================
+   LAUNCH / INAUGURATION STYLES
+   ========================================================================== */
+
+.launch-body {
+    background-color: #0c0f16;
+    color: #ffffff;
+    font-family: var(--font-sans);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.launch-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    padding: 20px;
+    text-align: center;
+    z-index: 10;
+}
+
+.launch-header {
+    margin-bottom: 60px;
+}
+
+.launch-eyebrow {
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--brand-blue);
+    display: inline-block;
+    margin-bottom: 12px;
+}
+
+.launch-title {
+    font-family: var(--font-heading);
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin: 0 0 16px 0;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #ffffff, #8892b0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.launch-subtitle {
+    font-size: 1.15rem;
+    color: #8892b0;
+    max-width: 540px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Launch Button */
+.launch-btn {
+    background: linear-gradient(135deg, #ffd700, #ffa500);
+    color: #0c0f16;
+    border: none;
+    padding: 18px 44px;
+    border-radius: 99px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(255, 215, 0, 0.25), inset 0 2px 0 rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    animation: pulseGlow 2s infinite;
+}
+
+.launch-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(255, 215, 0, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.3);
+}
+
+.launch-btn:active {
+    transform: translateY(-1px);
+}
+
+.launch-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    animation: none;
+}
+
+@keyframes pulseGlow {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 8px 24px rgba(255, 215, 0, 0.25);
+    }
+
+    50% {
+        transform: scale(1.04);
+        box-shadow: 0 8px 36px rgba(255, 215, 0, 0.5);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 8px 24px rgba(255, 215, 0, 0.25);
+    }
+}
+
+/* Responsiveness */
+@media (max-width: 576px) {
+    .launch-title {
+        font-size: 2.3rem;
+    }
+
+    .launch-subtitle {
+        font-size: 1rem;
+    }
+}

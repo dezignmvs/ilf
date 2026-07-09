@@ -297,6 +297,41 @@
       } catch (err) {
         console.error("Error loading homepage news:", err);
       }
+
+      // Check for inauguration flag to run celebration confetti
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('inaugurated') === 'true') {
+        const confettiScript = document.createElement('script');
+        confettiScript.src = 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js';
+        confettiScript.onload = () => {
+          const duration = 3 * 1000;
+          const end = Date.now() + duration;
+
+          const frame = () => {
+            confetti({
+              particleCount: 5,
+              angle: 60,
+              spread: 55,
+              origin: { x: 0, y: 0.8 }
+            });
+            confetti({
+              particleCount: 5,
+              angle: 120,
+              spread: 55,
+              origin: { x: 1, y: 0.8 }
+            });
+
+            if (Date.now() < end) {
+              requestAnimationFrame(frame);
+            }
+          };
+          frame();
+          
+          // Clear query params so it doesn't re-trigger on refresh
+          window.history.replaceState({}, document.title, window.location.pathname);
+        };
+        document.body.appendChild(confettiScript);
+      }
     });
   </script>
 </body>
