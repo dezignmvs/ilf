@@ -996,7 +996,7 @@ header.nav-hidden .nav-menu {
   transform: translateY(30px);
   animation: cardFadeInUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
   animation-delay: calc(var(--delay, 0) * 150ms);
-  aspect-ratio: 1 / 1.15;
+  aspect-ratio: 1 / 1.30;
   max-width: 320px;
   width: 100%;
   margin: 0 auto;

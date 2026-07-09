@@ -95,8 +95,12 @@ create table committee (
   name text not null,
   place text not null,
   position text not null,
-  image_url text not null
+  image_url text not null,
+  sort_order integer default 0 not null
 );
+
+-- NOTE: If your committee table is already created in Supabase, run this SQL query to update the schema:
+-- ALTER TABLE committee ADD COLUMN sort_order integer DEFAULT 0 NOT NULL;
 
 -- Enable Row Level Security (RLS)
 alter table committee enable row level security;
