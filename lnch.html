@@ -23,12 +23,29 @@
             <span class="launch-eyebrow">ILFA 10th Batch Union</span>
             <h1 class="launch-title">Official Website Launch</h1>
             <p class="launch-subtitle">Click the button below to inaugurate the official union portal.</p>
+            <p class="launch-inaugurator">Inaugurated by <strong>Favas Hudawi</strong>, College Principal</p>
         </div>
 
         <div style="margin: 60px 0;">
             <button class="launch-btn" id="launch-button">
                 Inaugurate Portal
             </button>
+        </div>
+    </div>
+
+    <!-- Developer Credit Card Overlay -->
+    <div class="dev-card-overlay" id="dev-card-overlay">
+        <div class="dev-card">
+            <div class="dev-card-inner">
+                <div class="dev-card-content">
+                    <span class="dev-card-eyebrow">Developed by</span>
+                    <h2 class="dev-card-brand">dezignmvs</h2>
+                    <p class="dev-card-author">Muhammed Suhail T P</p>
+                    <div class="dev-card-loader">
+                        <div class="dev-loader-bar"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -43,6 +60,12 @@
 
                 button.disabled = true;
 
+                // Show developer card overlay
+                const devOverlay = document.getElementById('dev-card-overlay');
+                if (devOverlay) {
+                    devOverlay.classList.add('show');
+                }
+
                 // Trigger confetti immediately
                 triggerConfetti();
 
@@ -53,11 +76,11 @@
                     setTimeout(() => {
                         window.location.href = 'index.html?inaugurated=true';
                     }, 800);
-                }, 2000);
+                }, 3200);
             };
 
             const triggerConfetti = () => {
-                const duration = 2 * 1000;
+                const duration = 3.2 * 1000;
                 const animationEnd = Date.now() + duration;
                 const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1000 };
 
